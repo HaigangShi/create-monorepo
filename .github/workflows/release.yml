@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'CHANGELOG.md'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Get version from package.json
+        id: package-version
+        run: echo "VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_OUTPUT
+
+      - name: Check if version was already released
+        id: check-version
+        run: |
+          VERSION=${{ steps.package-version.outputs.VERSION }}
+          if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push tag
+        if: steps.check-version.outputs.EXISTS == 'false'
+        run: |
+          VERSION=${{ steps.package-version.outputs.VERSION }}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "v$VERSION" -m "Release version $VERSION"
+          git push origin "v$VERSION"
+
+      - name: Create GitHub Release
+        if: steps.check-version.outputs.EXISTS == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.package-version.outputs.VERSION }}
+          release_name: Release v${{ steps.package-version.outputs.VERSION }}
+          body: |
+            ## 🎉 What's New in v${{ steps.package-version.outputs.VERSION }}
+            
+            ### Features
+            - Check the [CHANGELOG.md](CHANGELOG.md) for detailed changes
+            
+            ### Installation
+            ```bash
+            npm install -g create-monorepo
+            ```
+            
+            ### Quick Start
+            ```bash
+            create-monorepo my-project
+            cd my-project
+            pnpm install
+            pnpm run dev
+            ```
+            
+            ## 📚 Documentation
+            - [Getting Started](https://github.com/your-username/create-monorepo#getting-started)
+            - [CLI Commands](https://github.com/your-username/create-monorepo#cli-commands)
+            - [Templates](https://github.com/your-username/create-monorepo#templates)
+            
+            ## 🐛 Bug Reports
+            If you encounter any issues, please report them at:
+            https://github.com/your-username/create-monorepo/issues
+          draft: false
+          prerelease: false
+
+      - name: Publish to NPM
+        if: steps.check-version.outputs.EXISTS == 'false'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm publish
+
+      - name: Update documentation
+        if: steps.check-version.outputs.EXISTS == 'false'
+        run: |
+          echo "Documentation would be updated here"
+          # Add documentation update logic here

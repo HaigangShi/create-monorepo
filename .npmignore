@@ -1,0 +1,24 @@
+# Source files
+src/
+tsconfig.json
+*.test.ts
+*.spec.ts
+jest.config.js
+jest.e2e.config.js
+
+# Development files
+.eslintrc.js
+.prettierrc
+.github/
+.gitignore
+
+# Build artifacts
+*.log
+.DS_Store
+node_modules/
+dist/**/*.map
+
+# Documentation (keep README.md)
+docs/
+*.md
+!README.md
