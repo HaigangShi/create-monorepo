@@ -29,7 +29,9 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action((projectName: string | undefined, options: CreateOptions) => createMonorepo(projectName, options));
+      .action((projectName: string | undefined, options: CreateOptions) => 
+        createMonorepo(projectName, options)
+      );
 
     // Create command
     program
@@ -41,7 +43,9 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action((projectName: string | undefined, options: CreateOptions) => createMonorepo(projectName, options));
+      .action((projectName: string | undefined, options: CreateOptions) => 
+        createMonorepo(projectName, options)
+      );
 
     // Plugin command
     program
@@ -84,7 +88,10 @@ process.on('uncaughtException', error => {
 });
 
 process.on('unhandledRejection', reason => {
-  console.error(chalk.red('Unhandled Rejection:'), reason instanceof Error ? reason.message : reason);
+  console.error(
+    chalk.red('Unhandled Rejection:'),
+    reason instanceof Error ? reason.message : reason
+  );
   process.exit(1);
 });
 

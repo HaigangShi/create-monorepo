@@ -142,7 +142,7 @@ async function createPackagesStructure(projectPath: string, config: MonorepoConf
 
     const structure = {
       src: null,
-      'package.json': getPackagePackageJson(pkg.name, pkg.type),
+      'package.json': getPackagePackageJson(pkg.name),
       'tsconfig.json': getTsConfig(),
       'README.md': getPackageReadme(pkg.name, pkg.type),
     };
@@ -164,7 +164,7 @@ async function createServicesStructure(projectPath: string, config: MonorepoConf
         routes: null,
         middleware: null,
       },
-      'package.json': getServicePackageJson(service.name, service.type),
+      'package.json': getServicePackageJson(service.name),
       'tsconfig.json': getTsConfig(),
       'README.md': getServiceReadme(service.name, service.type),
     };
@@ -471,7 +471,7 @@ function getSveltePackageJson(): string {
   );
 }
 
-function getPackagePackageJson(name: string, type: string): string {
+function getPackagePackageJson(name: string): string {
   return JSON.stringify(
     {
       name: `@monorepo/${name}`,
@@ -493,7 +493,7 @@ function getPackagePackageJson(name: string, type: string): string {
   );
 }
 
-function getServicePackageJson(name: string, type: string): string {
+function getServicePackageJson(name: string): string {
   return JSON.stringify(
     {
       name: `@monorepo/${name}`,

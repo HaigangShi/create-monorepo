@@ -1,4 +1,4 @@
-import { Plugin } from '../types';
+import { Plugin, PackageJsonConfig } from '../types';
 import { fileExists, readFile, writeFile } from '../utils/file-system';
 
 export interface PluginOptions {
@@ -6,6 +6,7 @@ export interface PluginOptions {
   install?: string;
   uninstall?: string;
 }
+
 const AVAILABLE_PLUGINS: Plugin[] = [
   {
     name: 'storybook',
@@ -102,18 +103,18 @@ const AVAILABLE_PLUGINS: Plugin[] = [
 
 export async function managePlugins(options: PluginOptions): Promise<void> {
   if (options.list) {
-    await listPlugins();
+    listPlugins();
   } else if (options.install) {
     await installPlugin(options.install);
   } else if (options.uninstall) {
     await uninstallPlugin(options.uninstall);
   } else {
     console.log('Please specify an action: --list, --install, or --uninstall');
-    await listPlugins();
+    listPlugins();
   }
 }
 
-async function listPlugins(): Promise<void> {
+function listPlugins(): void {
   console.log('\n📦 Available Plugins:\n');
 
   AVAILABLE_PLUGINS.forEach(plugin => {
@@ -155,7 +156,10 @@ async function installPlugin(pluginName: string): Promise<void> {
     process.exit(1);
   }
 
-  const packageJson = JSON.parse(await readFile(packageJsonPath));
+  // Safe parsing with type assertion
+  const packageJsonContent = await readFile(packageJsonPath);
+  const packageJson: PackageJsonConfig = JSON.parse(packageJsonContent) as PackageJsonConfig;
+
   if (plugin.name === 'storybook') {
     await installStorybook(packageJson);
   } else if (plugin.name === 'playwright') {
@@ -202,7 +206,10 @@ async function uninstallPlugin(pluginName: string): Promise<void> {
     process.exit(1);
   }
 
-  const packageJson = JSON.parse(await readFile(packageJsonPath));
+  // Safe parsing with type assertion
+  const packageJsonContent = await readFile(packageJsonPath);
+  const packageJson: PackageJsonConfig = JSON.parse(packageJsonContent) as PackageJsonConfig;
+
   await plugin.uninstall(packageJson);
   await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
 
@@ -215,7 +222,7 @@ async function uninstallPlugin(pluginName: string): Promise<void> {
 }
 
 // Plugin installation implementations
-export async function installStorybook(config: any): Promise<void> {
+export async function installStorybook(config: PackageJsonConfig): Promise<void> {
   // Add Storybook dependencies to root package.json
   config.devDependencies = config.devDependencies || {};
   config.devDependencies['@storybook/react'] = '^7.0.0';
@@ -254,7 +261,7 @@ export default config;`;
   await writeFile('.storybook/main.ts', storybookConfig);
 }
 
-export async function installPlaywright(config: any): Promise<void> {
+export async function installPlaywright(config: PackageJsonConfig): Promise<void> {
   // Add Playwright dependencies
   config.devDependencies = config.devDependencies || {};
   config.devDependencies['@playwright/test'] = '^1.40.0';

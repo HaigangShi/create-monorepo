@@ -52,12 +52,19 @@ export interface ValidationResult {
   warnings: string[];
 }
 
+// Define a type for package.json configuration
+export interface PackageJsonConfig {
+  devDependencies?: Record<string, string>;
+  scripts?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 export interface Plugin {
   name: string;
   version: string;
   description: string;
-  install: (config: MonorepoConfig) => Promise<void>;
-  uninstall: (config: MonorepoConfig) => Promise<void>;
+  install: (config: PackageJsonConfig) => Promise<void>;
+  uninstall: (config: PackageJsonConfig) => Promise<void>;
 }
 
 export interface CLIContext {
