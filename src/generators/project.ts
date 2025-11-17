@@ -1,7 +1,6 @@
 import path from 'path';
 import { MonorepoConfig } from '../types';
-import { ensureDir, createDirectoryStructure } from '../utils/file-system';
-import { generateRootPackageJson } from './package-json';
+import { ensureDir, createDirectoryStructure, DirectoryStructure } from '../utils/file-system';
 
 export async function generateProjectStructure(
   projectPath: string,
@@ -30,11 +29,11 @@ export async function generateProjectStructure(
   await createAppsStructure(projectPath, config);
   await createPackagesStructure(projectPath, config);
   await createServicesStructure(projectPath, config);
-  await createConfigStructure(projectPath, config);
-  await createScriptStructure(projectPath, config);
-  await createDocumentationStructure(projectPath, config);
-  await createGitHubStructure(projectPath, config);
-  await createDevContainerStructure(projectPath, config);
+  await createConfigStructure(projectPath);
+  await createScriptStructure(projectPath);
+  await createDocumentationStructure(projectPath);
+  await createGitHubStructure(projectPath);
+  await createDevContainerStructure(projectPath);
 }
 
 async function createAppsStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
@@ -157,7 +156,7 @@ async function createServicesStructure(projectPath: string, config: MonorepoConf
     const servicePath = path.join(projectPath, 'services', service.name);
     await ensureDir(servicePath);
 
-    const structure = {
+    const structure: Record<string, string | null | DirectoryStructure> = {
       src: {
         controllers: null,
         services: null,
@@ -171,14 +170,14 @@ async function createServicesStructure(projectPath: string, config: MonorepoConf
     };
 
     if (service.database) {
-      (structure as any)['prisma'] = null;
+      structure.prisma = null;
     }
 
     await createDirectoryStructure(servicePath, structure);
   }
 }
 
-async function createConfigStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function createConfigStructure(projectPath: string): Promise<void> {
   const configPath = path.join(projectPath, 'configs');
 
   const structure = {
@@ -215,7 +214,7 @@ async function createConfigStructure(projectPath: string, config: MonorepoConfig
   await createDirectoryStructure(configPath, structure);
 }
 
-async function createScriptStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function createScriptStructure(projectPath: string): Promise<void> {
   const scriptsPath = path.join(projectPath, 'scripts');
 
   const structure = {
@@ -241,10 +240,7 @@ async function createScriptStructure(projectPath: string, config: MonorepoConfig
   await createDirectoryStructure(scriptsPath, structure);
 }
 
-async function createDocumentationStructure(
-  projectPath: string,
-  config: MonorepoConfig
-): Promise<void> {
+async function createDocumentationStructure(projectPath: string): Promise<void> {
   const docsPath = path.join(projectPath, 'docs');
 
   const structure = {
@@ -270,7 +266,7 @@ async function createDocumentationStructure(
   await createDirectoryStructure(docsPath, structure);
 }
 
-async function createGitHubStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function createGitHubStructure(projectPath: string): Promise<void> {
   const githubPath = path.join(projectPath, '.github', 'workflows');
 
   const structure = {
@@ -283,10 +279,7 @@ async function createGitHubStructure(projectPath: string, config: MonorepoConfig
   await createDirectoryStructure(githubPath, structure);
 }
 
-async function createDevContainerStructure(
-  projectPath: string,
-  config: MonorepoConfig
-): Promise<void> {
+async function createDevContainerStructure(projectPath: string): Promise<void> {
   const devcontainerPath = path.join(projectPath, '.devcontainer');
 
   const structure = {

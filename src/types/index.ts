@@ -64,5 +64,5 @@ export interface CLIContext {
   cwd: string;
   projectName: string;
   config: MonorepoConfig;
-  spinner: any;
+  spinner: unknown;
 }

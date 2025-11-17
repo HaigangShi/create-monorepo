@@ -1,16 +1,16 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { MonorepoConfig, AppConfig, PackageConfig, ServiceConfig } from '../types';
-import { validateProjectName, validatePackageManager, sanitizeProjectName } from './validation';
+import { validateProjectName, sanitizeProjectName } from './validation';
 
 export async function promptForProjectName(defaultName?: string): Promise<string> {
-  const { projectName } = await inquirer.prompt([
+  const { projectName } = await inquirer.prompt<{ projectName: string }>([
     {
       type: 'input',
       name: 'projectName',
       message: 'What is your project name?',
       default: defaultName || 'my-monorepo',
-      validate: (input: string) => {
+      validate: (input: string): string | boolean => {
         const sanitized = sanitizeProjectName(input);
         const validation = validateProjectName(sanitized);
 
@@ -28,7 +28,7 @@ export async function promptForProjectName(defaultName?: string): Promise<string
 }
 
 export async function promptForPackageManager(): Promise<'npm' | 'yarn' | 'pnpm'> {
-  const { packageManager } = await inquirer.prompt([
+  const { packageManager } = await inquirer.prompt<{ packageManager: 'npm' | 'yarn' | 'pnpm' }>([
     {
       type: 'list',
       name: 'packageManager',
@@ -46,7 +46,7 @@ export async function promptForPackageManager(): Promise<'npm' | 'yarn' | 'pnpm'
 }
 
 export async function promptForTemplate(): Promise<string> {
-  const { template } = await inquirer.prompt([
+  const { template } = await inquirer.prompt<{ template: string }>([
     {
       type: 'list',
       name: 'template',
@@ -67,7 +67,7 @@ export async function promptForTemplate(): Promise<string> {
 }
 
 export async function promptForDocker(): Promise<boolean> {
-  const { docker } = await inquirer.prompt([
+  const { docker } = await inquirer.prompt<{ docker: boolean }>([
     {
       type: 'confirm',
       name: 'docker',
@@ -80,7 +80,7 @@ export async function promptForDocker(): Promise<boolean> {
 }
 
 export async function promptForApps(): Promise<AppConfig[]> {
-  const { addApps } = await inquirer.prompt([
+  const { addApps } = await inquirer.prompt<{ addApps: boolean }>([
     {
       type: 'confirm',
       name: 'addApps',
@@ -100,7 +100,7 @@ export async function promptForApps(): Promise<AppConfig[]> {
     const appConfig = await promptForSingleApp();
     apps.push(appConfig);
 
-    const { continueAdding } = await inquirer.prompt([
+    const { continueAdding } = await inquirer.prompt<{ continueAdding: boolean }>([
       {
         type: 'confirm',
         name: 'continueAdding',
@@ -116,12 +116,16 @@ export async function promptForApps(): Promise<AppConfig[]> {
 }
 
 async function promptForSingleApp(): Promise<AppConfig> {
-  const answers = await inquirer.prompt([
+  const answers = await inquirer.prompt<{
+    name: string;
+    type: 'next' | 'vue' | 'react' | 'svelte';
+    port: number;
+  }>([
     {
       type: 'input',
       name: 'name',
       message: 'Application name:',
-      validate: (input: string) => {
+      validate: (input: string): string | boolean => {
         if (!input.trim()) {
           return 'Application name is required';
         }
@@ -144,7 +148,7 @@ async function promptForSingleApp(): Promise<AppConfig> {
       name: 'port',
       message: 'Development port:',
       default: 3000,
-      validate: (input: number) => {
+      validate: (input: number): string | boolean => {
         if (input < 1024 || input > 65535) {
           return 'Port must be between 1024 and 65535';
         }
@@ -162,7 +166,7 @@ async function promptForSingleApp(): Promise<AppConfig> {
 }
 
 export async function promptForPackages(): Promise<PackageConfig[]> {
-  const { addPackages } = await inquirer.prompt([
+  const { addPackages } = await inquirer.prompt<{ addPackages: boolean }>([
     {
       type: 'confirm',
       name: 'addPackages',
@@ -175,7 +179,7 @@ export async function promptForPackages(): Promise<PackageConfig[]> {
     return [];
   }
 
-  const { packages } = await inquirer.prompt([
+  const { packages } = await inquirer.prompt<{ packages: string[] }>([
     {
       type: 'checkbox',
       name: 'packages',
@@ -201,7 +205,7 @@ export async function promptForPackages(): Promise<PackageConfig[]> {
 }
 
 export async function promptForServices(): Promise<ServiceConfig[]> {
-  const { addServices } = await inquirer.prompt([
+  const { addServices } = await inquirer.prompt<{ addServices: boolean }>([
     {
       type: 'confirm',
       name: 'addServices',
@@ -214,7 +218,7 @@ export async function promptForServices(): Promise<ServiceConfig[]> {
     return [];
   }
 
-  const { services } = await inquirer.prompt([
+  const { services } = await inquirer.prompt<{ services: string[] }>([
     {
       type: 'checkbox',
       name: 'services',
@@ -238,7 +242,7 @@ export async function promptForServices(): Promise<ServiceConfig[]> {
 }
 
 export async function promptForTools(): Promise<string[]> {
-  const { tools } = await inquirer.prompt([
+  const { tools } = await inquirer.prompt<{ tools: string[] }>([
     {
       type: 'checkbox',
       name: 'tools',

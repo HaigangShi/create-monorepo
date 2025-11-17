@@ -1,6 +1,5 @@
 import { execa } from 'execa';
 import chalk from 'chalk';
-import { MonorepoConfig } from '../types';
 
 export async function installDependencies(
   projectPath: string,
@@ -26,7 +25,7 @@ export async function installDependencies(
         args = ['install'];
         break;
       default:
-        throw new Error(`Unsupported package manager: ${packageManager}`);
+        throw new Error(`Unsupported package manager: ${packageManager as string}`);
     }
 
     await execa(command, args, {
@@ -62,7 +61,7 @@ export function getPackageManagerInstallCommand(packageManager: 'npm' | 'yarn' |
     case 'pnpm':
       return 'pnpm install';
     default:
-      throw new Error(`Unsupported package manager: ${packageManager}`);
+      throw new Error(`Unsupported package manager: ${packageManager as string}`);
   }
 }
 
@@ -75,7 +74,7 @@ export function getPackageManagerAddCommand(packageManager: 'npm' | 'yarn' | 'pn
     case 'pnpm':
       return 'pnpm add';
     default:
-      throw new Error(`Unsupported package manager: ${packageManager}`);
+      throw new Error(`Unsupported package manager: ${packageManager as string}`);
   }
 }
 
@@ -88,6 +87,6 @@ export function getPackageManagerDevAddCommand(packageManager: 'npm' | 'yarn' | 
     case 'pnpm':
       return 'pnpm add -D';
     default:
-      throw new Error(`Unsupported package manager: ${packageManager}`);
+      throw new Error(`Unsupported package manager: ${packageManager as string}`);
   }
 }

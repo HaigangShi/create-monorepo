@@ -11,15 +11,26 @@ export async function generatePackageJson(
   await writeFile(path.join(projectPath, 'package.json'), JSON.stringify(rootPackageJson, null, 2));
 
   // Generate pnpm-workspace.yaml
-  const workspaceYaml = generateWorkspaceYaml(config);
+  const workspaceYaml = generateWorkspaceYaml();
   await writeFile(path.join(projectPath, 'pnpm-workspace.yaml'), workspaceYaml);
 
   // Generate turbo.json
-  const turboJson = generateTurboJson(config);
+  const turboJson = generateTurboJson();
   await writeFile(path.join(projectPath, 'turbo.json'), JSON.stringify(turboJson, null, 2));
 }
 
-export function generateRootPackageJson(config: MonorepoConfig): any {
+export interface PackageJson {
+  name: string;
+  version: string;
+  private: boolean;
+  description: string;
+  scripts: Record<string, string>;
+  devDependencies: Record<string, string>;
+  engines: Record<string, string>;
+  packageManager: string;
+}
+
+export function generateRootPackageJson(config: MonorepoConfig): PackageJson {
   const scripts = {
     dev: 'turbo run dev',
     build: 'turbo run build',
@@ -69,14 +80,28 @@ export function generateRootPackageJson(config: MonorepoConfig): any {
   };
 }
 
-function generateWorkspaceYaml(config: MonorepoConfig): string {
+function generateWorkspaceYaml(): string {
   return `packages:
   - 'apps/*'
   - 'packages/*'
   - 'services/*'`;
 }
 
-function generateTurboJson(config: MonorepoConfig): any {
+export interface TurboJson {
+  $schema: string;
+  globalDependencies: string[];
+  pipeline: Record<
+    string,
+    {
+      dependsOn?: string[];
+      outputs?: string[];
+      cache?: boolean;
+      persistent?: boolean;
+    }
+  >;
+}
+
+export function generateTurboJson(): TurboJson {
   const pipeline = {
     build: {
       dependsOn: ['^build'],

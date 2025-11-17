@@ -1,5 +1,4 @@
 import { execa } from 'execa';
-import path from 'path';
 
 export async function initializeGit(projectPath: string): Promise<void> {
   try {

@@ -24,19 +24,19 @@ export async function generateToolConfigs(
 
   // Generate .husky configuration
   if (config.tools.some(tool => tool.name === 'husky' && tool.enabled)) {
-    await generateHuskyConfigs(projectPath, config);
+    await generateHuskyConfigs(projectPath);
   }
 
   // Generate changesets configuration
   if (config.tools.some(tool => tool.name === 'changesets' && tool.enabled)) {
-    await generateChangesetsConfig(projectPath, config);
+    await generateChangesetsConfig(projectPath);
   }
 
   // Generate environment files
-  await generateEnvFiles(projectPath, config);
+  await generateEnvFiles(projectPath);
 
   // Generate additional tool configurations
-  await generateAdditionalToolConfigs(projectPath, config);
+  await generateAdditionalToolConfigs(projectPath);
 }
 
 function generateGitignore(): string {
@@ -224,7 +224,7 @@ function generatePrettierConfig(): string {
 `;
 }
 
-async function generateHuskyConfigs(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function generateHuskyConfigs(projectPath: string): Promise<void> {
   // Create pre-commit hook
   const preCommitContent = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
@@ -276,10 +276,7 @@ pnpm commitlint --edit $1
   await writeFile(path.join(projectPath, 'commitlint.config.js'), commitlintContent);
 }
 
-async function generateChangesetsConfig(
-  projectPath: string,
-  config: MonorepoConfig
-): Promise<void> {
+async function generateChangesetsConfig(projectPath: string): Promise<void> {
   // Create .changeset/config.json
   const changesetConfig = JSON.stringify(
     {
@@ -308,7 +305,7 @@ We have a quick list of common questions to get you started engaging with this p
   await writeFile(path.join(projectPath, '.changeset', 'README.md'), changesetReadme);
 }
 
-async function generateEnvFiles(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function generateEnvFiles(projectPath: string): Promise<void> {
   // Generate .env.example
   const envExample = `# Environment Variables
 
@@ -356,10 +353,7 @@ LOG_LEVEL=debug
   await writeFile(path.join(projectPath, '.env.local'), envLocal);
 }
 
-async function generateAdditionalToolConfigs(
-  projectPath: string,
-  config: MonorepoConfig
-): Promise<void> {
+async function generateAdditionalToolConfigs(projectPath: string): Promise<void> {
   // Generate VS Code settings
   const vscodeSettings = JSON.stringify(
     {

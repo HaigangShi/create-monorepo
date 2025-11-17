@@ -28,9 +28,13 @@ export async function copyTemplate(templatePath: string, targetPath: string): Pr
   await fs.copy(templatePath, targetPath);
 }
 
+export interface DirectoryStructure {
+  [key: string]: string | null | DirectoryStructure;
+}
+
 export async function createDirectoryStructure(
   basePath: string,
-  structure: Record<string, any>
+  structure: DirectoryStructure
 ): Promise<void> {
   for (const [key, value] of Object.entries(structure)) {
     const fullPath = path.join(basePath, key);
@@ -41,20 +45,20 @@ export async function createDirectoryStructure(
       await fs.writeFile(fullPath, value);
     } else if (value === null) {
       await ensureDir(fullPath);
-    } else if (typeof value === 'object') {
+    } else if (typeof value === 'object' && value !== null) {
       await ensureDir(fullPath);
       await createDirectoryStructure(fullPath, value);
     }
   }
 }
 
-export function formatJson(obj: any, indent = 2): string {
+export function formatJson(obj: unknown, indent = 2): string {
   return JSON.stringify(obj, null, indent);
 }
 
-export function parseJson<T = any>(jsonString: string): T {
+export function parseJson<T = unknown>(jsonString: string): T {
   try {
-    return JSON.parse(jsonString);
+    return JSON.parse(jsonString) as T;
   } catch (error) {
     throw new Error(`Invalid JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
