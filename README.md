@@ -2,7 +2,7 @@
 
 A powerful CLI tool for quickly initializing and managing containerized monorepo development environments.
 
-[![npm version](https://badge.fury.io/js/create-monorepo.svg)](https://badge.fury.io/js/create-monorepo)
+[![npm version](https://badge.fury.io/js/%40haigang.shi%2Fcreate-monorepo.svg)](https://badge.fury.io/js/%40haigang.shi%2Fcreate-monorepo)
 [![CI/CD](https://github.com/HaigangShi/create-monorepo/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/HaigangShi/create-monorepo/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -23,25 +23,25 @@ A powerful CLI tool for quickly initializing and managing containerized monorepo
 ### Global Installation (Recommended)
 
 ```bash
-npm install -g create-monorepo
+npm install -g @haigang.shi/create-monorepo
 ```
 
 ### Using npx (No Installation)
 
 ```bash
-npx create-monorepo my-project
+npx @haigang.shi/create-monorepo my-project
 ```
 
 ### Using Yarn
 
 ```bash
-yarn global add create-monorepo
+yarn global add @haigang.shi/create-monorepo
 ```
 
 ### Using pnpm
 
 ```bash
-pnpm add -g create-monorepo
+pnpm add -g @haigang.shi/create-monorepo
 ```
 
 ## 🎯 Quick Start
