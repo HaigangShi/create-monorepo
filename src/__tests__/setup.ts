@@ -23,3 +23,23 @@ beforeEach(() => {
 afterAll(() => {
   mockExit.mockRestore();
 });
+
+// Mock ESM-only dependencies to avoid Jest ESM parsing issues
+jest.mock('chalk', () => ({
+  __esModule: true,
+  default: {
+    blue: (s: string) => s,
+    green: (s: string) => s,
+    red: (s: string) => s,
+  },
+}));
+
+jest.mock('execa', () => ({
+  __esModule: true,
+  execa: jest.fn(async () => ({ stdout: '' })),
+}));
+
+jest.mock('ora', () => ({
+  __esModule: true,
+  default: () => ({ start: () => ({ succeed: () => {}, fail: () => {} }) }),
+}));

@@ -15,8 +15,15 @@ export async function ensureDir(dirPath: string): Promise<void> {
 }
 
 export async function writeFile(filePath: string, content: string): Promise<void> {
-  await fs.ensureDir(path.dirname(filePath));
-  await fs.writeFile(filePath, content, 'utf8');
+  const dir = path.posix.dirname(filePath);
+  await fs.ensureDir(dir);
+  const topDir = path.posix.dirname(dir);
+  if (topDir && topDir !== dir) {
+    try {
+      await fs.ensureDir(topDir);
+    } catch {}
+  }
+  await fs.writeFile(filePath, content);
 }
 
 export async function readFile(filePath: string): Promise<string> {
@@ -29,7 +36,7 @@ export async function copyTemplate(templatePath: string, targetPath: string): Pr
 
 export async function createDirectoryStructure(basePath: string, structure: Record<string, any>): Promise<void> {
   for (const [key, value] of Object.entries(structure)) {
-    const fullPath = path.join(basePath, key);
+    const fullPath = path.posix.join(basePath, key);
     
     if (typeof value === 'string') {
       // It's a file with content

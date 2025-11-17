@@ -5,10 +5,10 @@ import { writeFile } from '../utils/file-system';
 export async function generateDockerConfig(projectPath: string, config: MonorepoConfig): Promise<void> {
   // Generate Docker Compose configuration
   const dockerComposeContent = generateDockerCompose(config);
-  await writeFile(path.join(projectPath, 'docker-compose.yml'), dockerComposeContent);
+  await writeFile(path.posix.join(projectPath, 'docker-compose.yml'), dockerComposeContent);
 
   // Generate Dockerfiles for different services
-  const dockerPath = path.join(projectPath, 'configs', 'docker');
+  const dockerPath = path.posix.join(projectPath, 'configs', 'docker');
   
   const dockerfiles = {
     'Dockerfile.web': generateWebDockerfile(),
@@ -16,19 +16,19 @@ export async function generateDockerConfig(projectPath: string, config: Monorepo
   };
 
   for (const [filename, content] of Object.entries(dockerfiles)) {
-    await writeFile(path.join(dockerPath, filename), content);
+    await writeFile(path.posix.join(dockerPath, filename), content);
   }
 
   // Generate .dockerignore
   const dockerignoreContent = generateDockerignore();
-  await writeFile(path.join(projectPath, '.dockerignore'), dockerignoreContent);
+  await writeFile(path.posix.join(projectPath, '.dockerignore'), dockerignoreContent);
 
   // Generate nginx configuration
   const nginxConfig = generateNginxConfig();
-  await writeFile(path.join(projectPath, 'configs', 'nginx', 'nginx.conf'), nginxConfig);
+  await writeFile(path.posix.join(projectPath, 'configs', 'nginx', 'nginx.conf'), nginxConfig);
 }
 
-function generateDockerCompose(config: MonorepoConfig): string {
+export function generateDockerCompose(config: MonorepoConfig): string {
   const services: string[] = [];
   const volumes: string[] = [];
   const networks: string[] = ['monorepo-network'];
@@ -121,7 +121,7 @@ networks:${networks.map(net => `\n  ${net}:`).join('')}
 `;
 }
 
-function generateWebDockerfile(): string {
+export function generateWebDockerfile(): string {
   return `# Build stage
 FROM node:18-alpine AS builder
 
@@ -176,7 +176,7 @@ CMD ["pnpm", "start"]
 `;
 }
 
-function generateApiDockerfile(): string {
+export function generateApiDockerfile(): string {
   return `# Build stage
 FROM node:18-alpine AS builder
 
@@ -231,7 +231,7 @@ CMD ["pnpm", "start"]
 `;
 }
 
-function generateDockerignore(): string {
+export function generateDockerignore(): string {
   return `# Dependencies
 node_modules
 npm-debug.log*
@@ -324,7 +324,7 @@ temp/
 `;
 }
 
-function generateNginxConfig(): string {
+export function generateNginxConfig(): string {
   return `events {
     worker_connections 1024;
 }
