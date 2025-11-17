@@ -12,7 +12,7 @@ import { installDependencies } from '../utils/package-manager';
 import { validateProjectName } from '../utils/validation';
 import { fileExists } from '../utils/file-system';
 
-interface CreateOptions {
+export interface CreateOptions {
   template?: string;
   packageManager?: 'npm' | 'yarn' | 'pnpm';
   docker?: boolean;

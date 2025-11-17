@@ -2,7 +2,8 @@
 
 import { program } from 'commander';
 import chalk from 'chalk';
-import { createMonorepo } from './commands/create';
+import { createMonorepo, CreateOptions } from './commands/create';
+import { PluginOptions } from './commands/plugin';
 import { validateNodeVersion } from './utils/validation';
 import { version } from '../package.json';
 
@@ -28,7 +29,7 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action((projectName: string | undefined, options) => createMonorepo(projectName, options));
+      .action((projectName: string | undefined, options: CreateOptions) => createMonorepo(projectName, options));
 
     // Create command
     program
@@ -40,7 +41,7 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action(createMonorepo);
+      .action((projectName: string | undefined, options: CreateOptions) => createMonorepo(projectName, options));
 
     // Plugin command
     program
@@ -49,7 +50,7 @@ async function main() {
       .option('-l, --list', 'list available plugins')
       .option('-i, --install <plugin>', 'install a plugin')
       .option('-u, --uninstall <plugin>', 'uninstall a plugin')
-      .action(async options => {
+      .action(async (options: PluginOptions) => {
         const { managePlugins } = await import('./commands/plugin');
         await managePlugins(options);
       });
@@ -78,16 +79,16 @@ async function main() {
 
 // Handle uncaught exceptions
 process.on('uncaughtException', error => {
-  console.error(chalk.red('Uncaught Exception:'), error.message);
+  console.error(chalk.red('Uncaught Exception:'), error instanceof Error ? error.message : error);
   process.exit(1);
 });
 
 process.on('unhandledRejection', reason => {
-  console.error(chalk.red('Unhandled Rejection:'), reason);
+  console.error(chalk.red('Unhandled Rejection:'), reason instanceof Error ? reason.message : reason);
   process.exit(1);
 });
 
 main().catch(error => {
-  console.error(chalk.red('Fatal Error:'), error.message);
+  console.error(chalk.red('Fatal Error:'), error instanceof Error ? error.message : error);
   process.exit(1);
 });

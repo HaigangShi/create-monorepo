@@ -1,89 +1,101 @@
-import ora from 'ora';
 import { Plugin } from '../types';
 import { fileExists, readFile, writeFile } from '../utils/file-system';
 
-interface PluginOptions {
+export interface PluginOptions {
   list?: boolean;
   install?: string;
   uninstall?: string;
 }
-
 const AVAILABLE_PLUGINS: Plugin[] = [
   {
     name: 'storybook',
     version: '1.0.0',
     description: 'Storybook for component development',
-    install: async config => {
+    install: () => {
       console.log('📚 Installing Storybook...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('📚 Uninstalling Storybook...');
+      return Promise.resolve();
     },
   },
   {
     name: 'playwright',
     version: '1.0.0',
     description: 'Playwright for end-to-end testing',
-    install: async config => {
+    install: () => {
       console.log('🎭 Installing Playwright...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('🎭 Uninstalling Playwright...');
+      return Promise.resolve();
     },
   },
   {
     name: 'cypress',
     version: '1.0.0',
     description: 'Cypress for end-to-end testing',
-    install: async config => {
+    install: () => {
       console.log('🌲 Installing Cypress...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('🌲 Uninstalling Cypress...');
+      return Promise.resolve();
     },
   },
   {
     name: 'jest',
     version: '1.0.0',
     description: 'Jest testing framework',
-    install: async config => {
+    install: () => {
       console.log('🃏 Installing Jest...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('🃏 Uninstalling Jest...');
+      return Promise.resolve();
     },
   },
   {
     name: 'prisma',
     version: '1.0.0',
     description: 'Prisma ORM for database management',
-    install: async config => {
+    install: () => {
       console.log('🗄️ Installing Prisma...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('🗄️ Uninstalling Prisma...');
+      return Promise.resolve();
     },
   },
   {
     name: 'supabase',
     version: '1.0.0',
     description: 'Supabase for backend services',
-    install: async config => {
+    install: () => {
       console.log('🚀 Installing Supabase...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('🚀 Uninstalling Supabase...');
+      return Promise.resolve();
     },
   },
   {
     name: 'stripe',
     version: '1.0.0',
     description: 'Stripe for payment processing',
-    install: async config => {
+    install: () => {
       console.log('💳 Installing Stripe...');
+      return Promise.resolve();
     },
-    uninstall: async config => {
+    uninstall: () => {
       console.log('💳 Uninstalling Stripe...');
+      return Promise.resolve();
     },
   },
 ];

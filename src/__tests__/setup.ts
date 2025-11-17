@@ -36,7 +36,7 @@ jest.mock('chalk', () => ({
 
 jest.mock('execa', () => ({
   __esModule: true,
-  execa: jest.fn(async () => ({ stdout: '' })),
+  execa: jest.fn(() => Promise.resolve({ stdout: '' })),
 }));
 
 jest.mock('ora', () => ({
