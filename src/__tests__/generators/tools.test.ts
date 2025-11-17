@@ -1,6 +1,7 @@
 import { generateToolConfigs } from '../../generators/tools';
 import { MonorepoConfig } from '../../types';
 import { writeFile } from '../../utils/file-system';
+import path from 'path';
 
 jest.mock('../../utils/file-system');
 
@@ -35,7 +36,7 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.gitignore',
+        path.join('/project/path', '.gitignore'),
         expect.stringContaining('node_modules')
       );
     });
@@ -44,7 +45,7 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.eslintrc.js',
+        path.join('/project/path', '.eslintrc.js'),
         expect.stringContaining('module.exports')
       );
     });
@@ -53,7 +54,7 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.prettierrc',
+        path.join('/project/path', '.prettierrc'),
         expect.stringContaining('{')
       );
     });
@@ -62,12 +63,12 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.husky/pre-commit',
+        path.join('/project/path', '.husky', 'pre-commit'),
         expect.stringContaining('pnpm lint-staged')
       );
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.husky/commit-msg',
+        path.join('/project/path', '.husky', 'commit-msg'),
         expect.stringContaining('pnpm commitlint')
       );
     });
@@ -76,7 +77,7 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.changeset/config.json',
+        path.join('/project/path', '.changeset', 'config.json'),
         expect.stringContaining('changelog')
       );
     });
@@ -85,12 +86,12 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.env.example',
+        path.join('/project/path', '.env.example'),
         expect.stringContaining('NODE_ENV')
       );
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.env.local',
+        path.join('/project/path', '.env.local'),
         expect.stringContaining('NODE_ENV=development')
       );
     });
@@ -99,12 +100,12 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', mockConfig);
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.vscode/settings.json',
+        path.join('/project/path', '.vscode', 'settings.json'),
         expect.stringContaining('editor.defaultFormatter')
       );
 
       expect(mockedWriteFile).toHaveBeenCalledWith(
-        '/project/path/.vscode/extensions.json',
+        path.join('/project/path', '.vscode', 'extensions.json'),
         expect.stringContaining('recommendations')
       );
     });
@@ -121,7 +122,7 @@ describe('Tools Generator', () => {
       await generateToolConfigs('/project/path', configWithDisabledTools);
 
       // Should still generate .gitignore and env files
-      expect(mockedWriteFile).toHaveBeenCalledWith('/project/path/.gitignore', expect.any(String));
+      expect(mockedWriteFile).toHaveBeenCalledWith(path.join('/project/path', '.gitignore'), expect.any(String));
 
       // Should not generate ESLint or Prettier configs
       const calls = mockedWriteFile.mock.calls;
