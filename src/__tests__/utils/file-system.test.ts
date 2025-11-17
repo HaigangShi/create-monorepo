@@ -52,7 +52,7 @@ describe('File System Utils', () => {
 
       await writeFile('/path/to/file.txt', 'content');
 
-      expect(mockedFs.ensureDir).toHaveBeenCalledWith('/path');
+      expect(mockedFs.ensureDir).toHaveBeenCalledWith('/path/to');
       expect(mockedFs.writeFile).toHaveBeenCalledWith('/path/to/file.txt', 'content', 'utf8');
     });
   });
@@ -81,9 +81,9 @@ describe('File System Utils', () => {
 
       await createDirectoryStructure('/base', structure);
 
-      expect(mockedFs.writeFile).toHaveBeenCalledWith('/base/file.txt', 'content');
-      expect(mockedFs.ensureDir).toHaveBeenCalledWith('/base/dir');
-      expect(mockedFs.writeFile).toHaveBeenCalledWith('/base/dir/nested.txt', 'nested content');
+      expect(mockedFs.writeFile).toHaveBeenCalledWith(path.join('/base', 'file.txt'), 'content');
+      expect(mockedFs.ensureDir).toHaveBeenCalledWith(path.join('/base', 'dir'));
+      expect(mockedFs.writeFile).toHaveBeenCalledWith(path.join('/base', 'dir', 'nested.txt'), 'nested content');
     });
 
     it('should handle empty directories', async () => {
@@ -95,7 +95,7 @@ describe('File System Utils', () => {
 
       await createDirectoryStructure('/base', structure);
 
-      expect(mockedFs.ensureDir).toHaveBeenCalledWith('/base/empty-dir');
+      expect(mockedFs.ensureDir).toHaveBeenCalledWith(path.join('/base', 'empty-dir'));
     });
   });
 
