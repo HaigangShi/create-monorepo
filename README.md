@@ -3,7 +3,7 @@
 A powerful CLI tool for quickly initializing and managing containerized monorepo development environments.
 
 [![npm version](https://badge.fury.io/js/create-monorepo.svg)](https://badge.fury.io/js/create-monorepo)
-[![CI/CD](https://github.com/your-username/create-monorepo/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/your-username/create-monorepo/actions)
+[![CI/CD](https://github.com/HaigangShi/create-monorepo/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/HaigangShi/create-monorepo/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🚀 Features
@@ -558,7 +558,7 @@ git commit -m "Initial commit"
 
 1. **Run Doctor**: `create-monorepo doctor`
 2. **Check Logs**: Review console output and error messages
-3. **GitHub Issues**: [Report issues on GitHub](https://github.com/your-username/create-monorepo/issues)
+3. **GitHub Issues**: [Report issues on GitHub](https://github.com/HaigangShi/create-monorepo/issues)
 4. **Documentation**: Check the `docs/` directory in your generated project
 
 ## 🤝 Contributing
@@ -569,7 +569,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/your-username/create-monorepo.git
+git clone https://github.com/HaigangShi/create-monorepo.git
 cd create-monorepo
 
 # Install dependencies
@@ -605,9 +605,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: support@create-monorepo.dev
+- 📧 Email: haigang.shi@foxmail.com
 - 💬 Discord: [Join our Discord](https://discord.gg/create-monorepo)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/create-monorepo/issues)
+- 🐛 Issues: [GitHub Issues](https://github.com/HaigangShi/create-monorepo/issues)
 - 📖 Documentation: [Full Documentation](https://create-monorepo.dev/docs)
 
 ---

@@ -84,13 +84,13 @@ jobs:
             ```
             
             ## 📚 Documentation
-            - [Getting Started](https://github.com/your-username/create-monorepo#getting-started)
-            - [CLI Commands](https://github.com/your-username/create-monorepo#cli-commands)
-            - [Templates](https://github.com/your-username/create-monorepo#templates)
+            - [Getting Started](https://github.com/haigangshi/create-monorepo#getting-started)
+            - [CLI Commands](https://github.com/haigangshi/create-monorepo#cli-commands)
+            - [Templates](https://github.com/haigangshi/create-monorepo#templates)
             
             ## 🐛 Bug Reports
             If you encounter any issues, please report them at:
-            https://github.com/your-username/create-monorepo/issues
+            https://github.com/haigangshi/create-monorepo/issues
           draft: false
           prerelease: false
 

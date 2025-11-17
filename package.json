@@ -31,7 +31,7 @@
     "containerization",
     "development-environment"
   ],
-  "author": "create-monorepo <your-email@example.com>",
+  "author": "create-monorepo <haigang.shi@foxmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=16.0.0"
@@ -75,10 +75,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/create-monorepo.git"
+    "url": "https://github.com/HaigangShi/create-monorepo.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/create-monorepo/issues"
+    "url": "https://github.com/HaigangShi/create-monorepo/issues"
   },
-  "homepage": "https://github.com/your-username/create-monorepo#readme"
+  "homepage": "https://github.com/HaigangShi/create-monorepo#readme"
 }
