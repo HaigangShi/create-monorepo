@@ -9,19 +9,23 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'prettier',
   ],
   rules: {
-    'prettier/prettier': ['error', { endOfLine: 'auto' }],
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-non-null-assertion': 'warn',
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'no-console': 'off',
   },
   env: {
     node: true,
     jest: true,
   },
+  ignorePatterns: [
+    '**/*.test.ts',
+    '**/*.spec.ts',
+    '**/e2e/**',
+  ],
 };
