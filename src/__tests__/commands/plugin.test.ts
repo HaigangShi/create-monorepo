@@ -18,35 +18,35 @@ describe('Plugin Command', () => {
   describe('managePlugins', () => {
     it('should list available plugins', async () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-      
+
       await managePlugins({ list: true });
-      
+
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Available Plugins'));
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('storybook'));
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('playwright'));
-      
+
       consoleSpy.mockRestore();
     });
 
     it('should install a plugin', async () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-      
+
       await managePlugins({ install: 'storybook' });
-      
+
       expect(mockedWriteFile).toHaveBeenCalledWith('./package.json', expect.any(String));
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('installed successfully'));
-      
+
       consoleSpy.mockRestore();
     });
 
     it('should uninstall a plugin', async () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-      
+
       await managePlugins({ uninstall: 'storybook' });
-      
+
       expect(mockedWriteFile).toHaveBeenCalledWith('./package.json', expect.any(String));
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('uninstalled successfully'));
-      
+
       consoleSpy.mockRestore();
     });
 
@@ -55,22 +55,22 @@ describe('Plugin Command', () => {
       const processExitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('Process.exit');
       });
-      
+
       await expect(managePlugins({ install: 'non-existent' })).rejects.toThrow('Process.exit');
-      
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('not found'));
-      
+
       consoleErrorSpy.mockRestore();
       processExitSpy.mockRestore();
     });
 
     it('should show help when no options provided', async () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-      
+
       await managePlugins({});
-      
+
       expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Available Plugins'));
-      
+
       consoleSpy.mockRestore();
     });
 
@@ -80,11 +80,13 @@ describe('Plugin Command', () => {
       const processExitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('Process.exit');
       });
-      
+
       await expect(managePlugins({ install: 'storybook' })).rejects.toThrow('Process.exit');
-      
-      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('Not in a monorepo project directory'));
-      
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Not in a monorepo project directory')
+      );
+
       consoleErrorSpy.mockRestore();
       processExitSpy.mockRestore();
     });
@@ -96,11 +98,11 @@ describe('Plugin Command', () => {
         devDependencies: {},
         scripts: {},
       };
-      
+
       mockedReadFile.mockResolvedValue(JSON.stringify(mockConfig));
-      
+
       await installStorybook(mockConfig);
-      
+
       expect(mockedWriteFile).toHaveBeenCalledWith(
         './package.json',
         expect.stringContaining('@storybook/react')
@@ -118,11 +120,11 @@ describe('Plugin Command', () => {
         devDependencies: {},
         scripts: {},
       };
-      
+
       mockedReadFile.mockResolvedValue(JSON.stringify(mockConfig));
-      
+
       await installPlaywright(mockConfig);
-      
+
       expect(mockedWriteFile).toHaveBeenCalledWith(
         './package.json',
         expect.stringContaining('@playwright/test')

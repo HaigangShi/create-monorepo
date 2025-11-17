@@ -1,4 +1,9 @@
-import { validateNodeVersion, validateProjectName, validatePackageManager, sanitizeProjectName } from '../../utils/validation';
+import {
+  validateNodeVersion,
+  validateProjectName,
+  validatePackageManager,
+  sanitizeProjectName,
+} from '../../utils/validation';
 
 describe('Validation Utils', () => {
   describe('validateNodeVersion', () => {
@@ -35,12 +40,7 @@ describe('Validation Utils', () => {
 
   describe('validateProjectName', () => {
     it('should validate valid project names', () => {
-      const validNames = [
-        'my-project',
-        'test_project',
-        'simple',
-        'my-test-project-123',
-      ];
+      const validNames = ['my-project', 'test_project', 'simple', 'my-test-project-123'];
 
       validNames.forEach(name => {
         const result = validateProjectName(name);

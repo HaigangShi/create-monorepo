@@ -1,4 +1,10 @@
-import { generateDockerCompose, generateWebDockerfile, generateApiDockerfile, generateDockerignore, generateNginxConfig } from '../../generators/docker';
+import {
+  generateDockerCompose,
+  generateWebDockerfile,
+  generateApiDockerfile,
+  generateDockerignore,
+  generateNginxConfig,
+} from '../../generators/docker';
 import { MonorepoConfig } from '../../types';
 
 describe('Docker Generator', () => {
@@ -32,8 +38,8 @@ describe('Docker Generator', () => {
   describe('generateDockerCompose', () => {
     it('should generate docker-compose.yml with services', () => {
       const result = generateDockerCompose(mockConfig);
-      
-      expect(result).toContain('version: \'3.8\'');
+
+      expect(result).toContain("version: '3.8'");
       expect(result).toContain('services:');
       expect(result).toContain('web-app:');
       expect(result).toContain('api-service:');
@@ -61,7 +67,7 @@ describe('Docker Generator', () => {
 
     it('should include correct network configuration', () => {
       const result = generateDockerCompose(mockConfig);
-      
+
       expect(result).toContain('networks:');
       expect(result).toContain('monorepo-network:');
     });
@@ -88,7 +94,7 @@ describe('Docker Generator', () => {
   describe('generateWebDockerfile', () => {
     it('should generate multi-stage Dockerfile for web apps', () => {
       const result = generateWebDockerfile();
-      
+
       expect(result).toContain('FROM node:18-alpine AS builder');
       expect(result).toContain('FROM node:18-alpine AS runner');
       expect(result).toContain('RUN pnpm install --frozen-lockfile');
@@ -99,13 +105,13 @@ describe('Docker Generator', () => {
 
     it('should include production dependencies installation', () => {
       const result = generateWebDockerfile();
-      
+
       expect(result).toContain('RUN pnpm install --prod --frozen-lockfile');
     });
 
     it('should include health check', () => {
       const result = generateWebDockerfile();
-      
+
       expect(result).toContain('HEALTHCHECK');
       expect(result).toContain('curl -f http://localhost:3000/health');
     });
@@ -114,7 +120,7 @@ describe('Docker Generator', () => {
   describe('generateApiDockerfile', () => {
     it('should generate multi-stage Dockerfile for API services', () => {
       const result = generateApiDockerfile();
-      
+
       expect(result).toContain('FROM node:18-alpine AS builder');
       expect(result).toContain('FROM node:18-alpine AS runner');
       expect(result).toContain('RUN pnpm install --frozen-lockfile');
@@ -125,7 +131,7 @@ describe('Docker Generator', () => {
 
     it('should include service-specific configuration', () => {
       const result = generateApiDockerfile();
-      
+
       expect(result).toContain('COPY services/*/package.json ./services/*/');
       expect(result).toContain('COPY --from=builder /app/services ./services');
     });
@@ -134,7 +140,7 @@ describe('Docker Generator', () => {
   describe('generateDockerignore', () => {
     it('should generate comprehensive .dockerignore', () => {
       const result = generateDockerignore();
-      
+
       expect(result).toContain('node_modules');
       expect(result).toContain('.env');
       expect(result).toContain('.git');
@@ -145,14 +151,14 @@ describe('Docker Generator', () => {
 
     it('should include log files', () => {
       const result = generateDockerignore();
-      
+
       expect(result).toContain('*.log');
       expect(result).toContain('logs');
     });
 
     it('should include OS-specific files', () => {
       const result = generateDockerignore();
-      
+
       expect(result).toContain('.DS_Store');
       expect(result).toContain('Thumbs.db');
     });
@@ -161,7 +167,7 @@ describe('Docker Generator', () => {
   describe('generateNginxConfig', () => {
     it('should generate nginx configuration with upstream servers', () => {
       const result = generateNginxConfig();
-      
+
       expect(result).toContain('upstream frontend');
       expect(result).toContain('upstream api-gateway');
       expect(result).toContain('server {');
@@ -172,7 +178,7 @@ describe('Docker Generator', () => {
 
     it('should include proxy configuration', () => {
       const result = generateNginxConfig();
-      
+
       expect(result).toContain('proxy_pass');
       expect(result).toContain('proxy_set_header Host $host');
       expect(result).toContain('proxy_set_header X-Real-IP $remote_addr');
@@ -180,7 +186,7 @@ describe('Docker Generator', () => {
 
     it('should include health check endpoint', () => {
       const result = generateNginxConfig();
-      
+
       expect(result).toContain('location /health {');
       expect(result).toContain('return 200 "healthy\\n"');
     });

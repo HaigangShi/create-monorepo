@@ -1,4 +1,12 @@
-import { fileExists, ensureDir, writeFile, readFile, createDirectoryStructure, formatJson, parseJson } from '../../utils/file-system';
+import {
+  fileExists,
+  ensureDir,
+  writeFile,
+  readFile,
+  createDirectoryStructure,
+  formatJson,
+  parseJson,
+} from '../../utils/file-system';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -14,7 +22,7 @@ describe('File System Utils', () => {
   describe('fileExists', () => {
     it('should return true if file exists', async () => {
       mockedFs.access.mockResolvedValue(undefined);
-      
+
       const result = await fileExists('/path/to/file');
       expect(result).toBe(true);
       expect(mockedFs.access).toHaveBeenCalledWith('/path/to/file');
@@ -22,7 +30,7 @@ describe('File System Utils', () => {
 
     it('should return false if file does not exist', async () => {
       mockedFs.access.mockRejectedValue(new Error('File not found'));
-      
+
       const result = await fileExists('/path/to/nonexistent');
       expect(result).toBe(false);
     });
@@ -31,7 +39,7 @@ describe('File System Utils', () => {
   describe('ensureDir', () => {
     it('should create directory', async () => {
       mockedFs.ensureDir.mockResolvedValue(undefined);
-      
+
       await ensureDir('/path/to/dir');
       expect(mockedFs.ensureDir).toHaveBeenCalledWith('/path/to/dir');
     });
@@ -41,9 +49,9 @@ describe('File System Utils', () => {
     it('should write file with content', async () => {
       mockedFs.ensureDir.mockResolvedValue(undefined);
       mockedFs.writeFile.mockResolvedValue(undefined);
-      
+
       await writeFile('/path/to/file.txt', 'content');
-      
+
       expect(mockedFs.ensureDir).toHaveBeenCalledWith('/path');
       expect(mockedFs.writeFile).toHaveBeenCalledWith('/path/to/file.txt', 'content', 'utf8');
     });
@@ -52,7 +60,7 @@ describe('File System Utils', () => {
   describe('readFile', () => {
     it('should read file content', async () => {
       mockedFs.readFile.mockResolvedValue('file content');
-      
+
       const result = await readFile('/path/to/file.txt');
       expect(result).toBe('file content');
       expect(mockedFs.readFile).toHaveBeenCalledWith('/path/to/file.txt', 'utf8');
@@ -66,7 +74,7 @@ describe('File System Utils', () => {
 
       const structure = {
         'file.txt': 'content',
-        'dir': {
+        dir: {
           'nested.txt': 'nested content',
         },
       };
@@ -95,14 +103,14 @@ describe('File System Utils', () => {
     it('should format JSON with proper indentation', () => {
       const obj = { name: 'test', version: '1.0.0' };
       const result = formatJson(obj, 2);
-      
+
       expect(result).toBe(JSON.stringify(obj, null, 2));
     });
 
     it('should use custom indentation', () => {
       const obj = { name: 'test' };
       const result = formatJson(obj, 4);
-      
+
       expect(result).toBe(JSON.stringify(obj, null, 4));
     });
   });
@@ -111,13 +119,13 @@ describe('File System Utils', () => {
     it('should parse valid JSON', () => {
       const jsonString = '{"name": "test", "version": "1.0.0"}';
       const result = parseJson(jsonString);
-      
+
       expect(result).toEqual({ name: 'test', version: '1.0.0' });
     });
 
     it('should throw error for invalid JSON', () => {
       const invalidJson = '{invalid json}';
-      
+
       expect(() => parseJson(invalidJson)).toThrow('Invalid JSON');
     });
   });

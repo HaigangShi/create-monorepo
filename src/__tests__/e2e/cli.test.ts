@@ -30,7 +30,9 @@ describe('CLI E2E Tests', () => {
         await execa('node', [CLI_PATH]);
       } catch (error: any) {
         expect(error.stdout).toContain('create-monorepo');
-        expect(error.stdout).toContain('A CLI tool for quickly initializing and managing containerized monorepo development environments');
+        expect(error.stdout).toContain(
+          'A CLI tool for quickly initializing and managing containerized monorepo development environments'
+        );
       }
     });
 
@@ -52,7 +54,7 @@ describe('CLI E2E Tests', () => {
   describe('Create command', () => {
     it('should create a basic monorepo project', async () => {
       const projectName = 'test-basic-project';
-      
+
       const { stdout } = await execa('node', [
         CLI_PATH,
         'create',
@@ -63,11 +65,11 @@ describe('CLI E2E Tests', () => {
       ]);
 
       expect(stdout).toContain('Monorepo project created successfully');
-      
+
       // Check if project directory was created
       const projectPath = path.join(testDir, projectName);
       expect(await fs.pathExists(projectPath)).toBe(true);
-      
+
       // Check essential files
       expect(await fs.pathExists(path.join(projectPath, 'package.json'))).toBe(true);
       expect(await fs.pathExists(path.join(projectPath, 'pnpm-workspace.yaml'))).toBe(true);
@@ -76,7 +78,7 @@ describe('CLI E2E Tests', () => {
 
     it('should create a project with Docker configuration', async () => {
       const projectName = 'test-docker-project';
-      
+
       const { stdout } = await execa('node', [
         CLI_PATH,
         'create',
@@ -88,7 +90,7 @@ describe('CLI E2E Tests', () => {
       ]);
 
       expect(stdout).toContain('Monorepo project created successfully');
-      
+
       // Check if Docker files were created
       const projectPath = path.join(testDir, projectName);
       expect(await fs.pathExists(path.join(projectPath, 'docker-compose.yml'))).toBe(true);
@@ -99,18 +101,16 @@ describe('CLI E2E Tests', () => {
     it('should fail when project name already exists', async () => {
       const projectName = 'existing-project';
       const projectPath = path.join(testDir, projectName);
-      
+
       // Create directory first
       await fs.ensureDir(projectPath);
-      
-      await expect(
-        execa('node', [CLI_PATH, 'create', projectName])
-      ).rejects.toThrow();
+
+      await expect(execa('node', [CLI_PATH, 'create', projectName])).rejects.toThrow();
     });
 
     it('should create a project with specific package manager', async () => {
       const projectName = 'test-pm-project';
-      
+
       const { stdout } = await execa('node', [
         CLI_PATH,
         'create',
@@ -122,7 +122,7 @@ describe('CLI E2E Tests', () => {
       ]);
 
       expect(stdout).toContain('Monorepo project created successfully');
-      
+
       // Check package.json for package manager
       const packageJsonPath = path.join(testDir, projectName, 'package.json');
       const packageJson = await fs.readJson(packageJsonPath);
@@ -148,14 +148,14 @@ describe('CLI E2E Tests', () => {
 
       // Run doctor
       const { stdout } = await execa('node', [CLI_PATH, 'doctor']);
-      
+
       expect(stdout).toContain('Running monorepo diagnostics');
       expect(stdout).toContain('Diagnostic Results');
     }, 30000);
 
     it('should warn when not in a monorepo directory', async () => {
       const { stdout } = await execa('node', [CLI_PATH, 'doctor']);
-      
+
       expect(stdout).toContain('Running monorepo diagnostics');
       expect(stdout).toContain('warnings');
     });
@@ -164,7 +164,7 @@ describe('CLI E2E Tests', () => {
   describe('Plugin command', () => {
     it('should list available plugins', async () => {
       const { stdout } = await execa('node', [CLI_PATH, 'plugin', '--list']);
-      
+
       expect(stdout).toContain('Available Plugins');
       expect(stdout).toContain('storybook');
       expect(stdout).toContain('playwright');
@@ -180,15 +180,11 @@ describe('CLI E2E Tests', () => {
 
   describe('Error handling', () => {
     it('should handle invalid project names gracefully', async () => {
-      await expect(
-        execa('node', [CLI_PATH, 'create', 'invalid@project!'])
-      ).rejects.toThrow();
+      await expect(execa('node', [CLI_PATH, 'create', 'invalid@project!'])).rejects.toThrow();
     });
 
     it('should handle missing required arguments', async () => {
-      await expect(
-        execa('node', [CLI_PATH, 'create'])
-      ).rejects.toThrow();
+      await expect(execa('node', [CLI_PATH, 'create'])).rejects.toThrow();
     });
   });
 });

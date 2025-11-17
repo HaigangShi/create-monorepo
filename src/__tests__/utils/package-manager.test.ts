@@ -1,9 +1,9 @@
-import { 
-  checkPackageManagerInstalled, 
-  getPackageManagerInstallCommand, 
-  getPackageManagerAddCommand, 
+import {
+  checkPackageManagerInstalled,
+  getPackageManagerInstallCommand,
+  getPackageManagerAddCommand,
   getPackageManagerDevAddCommand,
-  installDependencies 
+  installDependencies,
 } from '../../utils/package-manager';
 import { execa } from 'execa';
 
@@ -19,7 +19,7 @@ describe('Package Manager Utils', () => {
   describe('checkPackageManagerInstalled', () => {
     it('should return true when package manager is installed', async () => {
       mockedExeca.mockResolvedValue({ stdout: '8.0.0', stderr: '', exitCode: 0 } as any);
-      
+
       const result = await checkPackageManagerInstalled('pnpm');
       expect(result).toBe(true);
       expect(mockedExeca).toHaveBeenCalledWith('pnpm', ['--version']);
@@ -27,7 +27,7 @@ describe('Package Manager Utils', () => {
 
     it('should return false when package manager is not installed', async () => {
       mockedExeca.mockRejectedValue(new Error('Command not found'));
-      
+
       const result = await checkPackageManagerInstalled('pnpm');
       expect(result).toBe(false);
     });
@@ -41,7 +41,9 @@ describe('Package Manager Utils', () => {
     });
 
     it('should throw for unsupported package manager', () => {
-      expect(() => getPackageManagerInstallCommand('invalid' as any)).toThrow('Unsupported package manager: invalid');
+      expect(() => getPackageManagerInstallCommand('invalid' as any)).toThrow(
+        'Unsupported package manager: invalid'
+      );
     });
   });
 
@@ -64,9 +66,9 @@ describe('Package Manager Utils', () => {
   describe('installDependencies', () => {
     it('should install dependencies successfully', async () => {
       mockedExeca.mockResolvedValue({ stdout: '', stderr: '', exitCode: 0 } as any);
-      
+
       await installDependencies('/project/path', 'pnpm');
-      
+
       expect(mockedExeca).toHaveBeenCalledWith('pnpm', ['install'], {
         cwd: '/project/path',
         stdio: 'inherit',
@@ -75,8 +77,10 @@ describe('Package Manager Utils', () => {
 
     it('should throw error when installation fails', async () => {
       mockedExeca.mockRejectedValue(new Error('Installation failed'));
-      
-      await expect(installDependencies('/project/path', 'pnpm')).rejects.toThrow('Installation failed');
+
+      await expect(installDependencies('/project/path', 'pnpm')).rejects.toThrow(
+        'Installation failed'
+      );
     });
   });
 });

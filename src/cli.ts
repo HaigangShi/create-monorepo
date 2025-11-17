@@ -29,7 +29,7 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action((projectName: string | undefined, options: CreateOptions) => 
+      .action((projectName: string | undefined, options: CreateOptions) =>
         createMonorepo(projectName, options)
       );
 
@@ -43,7 +43,7 @@ async function main() {
       .option('--skip-install', 'skip dependency installation', false)
       .option('--skip-git', 'skip git initialization', false)
       .option('--interactive', 'use interactive mode', false)
-      .action((projectName: string | undefined, options: CreateOptions) => 
+      .action((projectName: string | undefined, options: CreateOptions) =>
         createMonorepo(projectName, options)
       );
 
