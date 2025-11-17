@@ -1,5 +1,5 @@
 {
-  "name": "create-monorepo",
+  "name": "@haigang.shi/create-monorepo",
   "version": "1.0.0",
   "description": "A CLI tool for quickly initializing and managing containerized monorepo development environments",
   "main": "dist/index.js",
@@ -75,10 +75,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/HaigangShi/create-monorepo.git"
+    "url": "git+https://github.com/HaigangShi/create-monorepo.git"
   },
   "bugs": {
     "url": "https://github.com/HaigangShi/create-monorepo/issues"
   },
-  "homepage": "https://github.com/HaigangShi/create-monorepo#readme"
+  "homepage": "https://github.com/HaigangShi/create-monorepo#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }
