@@ -2,7 +2,10 @@ import path from 'path';
 import { MonorepoConfig } from '../types';
 import { writeFile } from '../utils/file-system';
 
-export async function generatePackageJson(projectPath: string, config: MonorepoConfig): Promise<void> {
+export async function generatePackageJson(
+  projectPath: string,
+  config: MonorepoConfig
+): Promise<void> {
   // Generate root package.json
   const rootPackageJson = generateRootPackageJson(config);
   await writeFile(path.join(projectPath, 'package.json'), JSON.stringify(rootPackageJson, null, 2));

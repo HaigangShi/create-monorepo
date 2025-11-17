@@ -20,17 +20,15 @@ export function validateProjectName(name: string): { valid: boolean; errors: str
   const pattern = /^[a-z][a-z0-9-_]*$/;
   const customErrors: string[] = [];
   if (!name || !pattern.test(name)) {
-    customErrors.push('Name must start with a letter and contain only lowercase letters, numbers, - or _');
+    customErrors.push(
+      'Name must start with a letter and contain only lowercase letters, numbers, - or _'
+    );
   }
   if (validation.validForNewPackages && customErrors.length === 0) {
     return { valid: true, errors: [] };
   }
 
-  const errors = [
-    ...(validation.errors || []),
-    ...(validation.warnings || []),
-    ...customErrors,
-  ];
+  const errors = [...(validation.errors || []), ...(validation.warnings || []), ...customErrors];
 
   return { valid: false, errors };
 }

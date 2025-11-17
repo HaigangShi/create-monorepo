@@ -13,10 +13,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'storybook',
     version: '1.0.0',
     description: 'Storybook for component development',
-    install: async (config) => {
+    install: async config => {
       console.log('📚 Installing Storybook...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('📚 Uninstalling Storybook...');
     },
   },
@@ -24,10 +24,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'playwright',
     version: '1.0.0',
     description: 'Playwright for end-to-end testing',
-    install: async (config) => {
+    install: async config => {
       console.log('🎭 Installing Playwright...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('🎭 Uninstalling Playwright...');
     },
   },
@@ -35,10 +35,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'cypress',
     version: '1.0.0',
     description: 'Cypress for end-to-end testing',
-    install: async (config) => {
+    install: async config => {
       console.log('🌲 Installing Cypress...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('🌲 Uninstalling Cypress...');
     },
   },
@@ -46,10 +46,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'jest',
     version: '1.0.0',
     description: 'Jest testing framework',
-    install: async (config) => {
+    install: async config => {
       console.log('🃏 Installing Jest...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('🃏 Uninstalling Jest...');
     },
   },
@@ -57,10 +57,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'prisma',
     version: '1.0.0',
     description: 'Prisma ORM for database management',
-    install: async (config) => {
+    install: async config => {
       console.log('🗄️ Installing Prisma...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('🗄️ Uninstalling Prisma...');
     },
   },
@@ -68,10 +68,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'supabase',
     version: '1.0.0',
     description: 'Supabase for backend services',
-    install: async (config) => {
+    install: async config => {
       console.log('🚀 Installing Supabase...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('🚀 Uninstalling Supabase...');
     },
   },
@@ -79,10 +79,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     name: 'stripe',
     version: '1.0.0',
     description: 'Stripe for payment processing',
-    install: async (config) => {
+    install: async config => {
       console.log('💳 Installing Stripe...');
     },
-    uninstall: async (config) => {
+    uninstall: async config => {
       console.log('💳 Uninstalling Stripe...');
     },
   },
@@ -103,8 +103,8 @@ export async function managePlugins(options: PluginOptions): Promise<void> {
 
 async function listPlugins(): Promise<void> {
   console.log('\n📦 Available Plugins:\n');
-  
-  AVAILABLE_PLUGINS.forEach((plugin) => {
+
+  AVAILABLE_PLUGINS.forEach(plugin => {
     console.log(`  ${plugin.name}`);
     console.log(`    ${plugin.description}`);
     console.log(`    Version: ${plugin.version}`);
@@ -117,7 +117,7 @@ async function listPlugins(): Promise<void> {
 
 async function installPlugin(pluginName: string): Promise<void> {
   const plugin = AVAILABLE_PLUGINS.find(p => p.name === pluginName);
-  
+
   if (!plugin) {
     console.error(`❌ Plugin "${pluginName}" not found`);
     console.log('Available plugins:');
@@ -134,7 +134,9 @@ async function installPlugin(pluginName: string): Promise<void> {
   const packageJsonPath = './package.json';
   const pnpmWorkspacePath = './pnpm-workspace.yaml';
   if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
-    console.error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    console.error(
+      'Not in a monorepo project directory. Please run this command from your monorepo root.'
+    );
     if (process.env.NODE_ENV === 'test') {
       throw new Error('Process.exit');
     }
@@ -150,9 +152,9 @@ async function installPlugin(pluginName: string): Promise<void> {
     await plugin.install(packageJson);
     await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
   }
-  
+
   console.log(`✅ Plugin "${plugin.name}" installed successfully`);
-  
+
   console.log('\n📋 Next steps:');
   console.log(`  - Review the configuration files created by ${plugin.name}`);
   console.log(`  - Update your environment variables if needed`);
@@ -162,7 +164,7 @@ async function installPlugin(pluginName: string): Promise<void> {
 
 async function uninstallPlugin(pluginName: string): Promise<void> {
   const plugin = AVAILABLE_PLUGINS.find(p => p.name === pluginName);
-  
+
   if (!plugin) {
     console.error(`❌ Plugin "${pluginName}" not found`);
     console.log('Available plugins:');
@@ -179,7 +181,9 @@ async function uninstallPlugin(pluginName: string): Promise<void> {
   const packageJsonPath = './package.json';
   const pnpmWorkspacePath = './pnpm-workspace.yaml';
   if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
-    console.error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    console.error(
+      'Not in a monorepo project directory. Please run this command from your monorepo root.'
+    );
     if (process.env.NODE_ENV === 'test') {
       throw new Error('Process.exit');
     }
@@ -189,9 +193,9 @@ async function uninstallPlugin(pluginName: string): Promise<void> {
   const packageJson = JSON.parse(await readFile(packageJsonPath));
   await plugin.uninstall(packageJson);
   await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
-  
+
   console.log(`✅ Plugin "${plugin.name}" uninstalled successfully`);
-  
+
   console.log('\n📋 Next steps:');
   console.log(`  - Remove any remaining configuration files`);
   console.log(`  - Update your environment variables`);
@@ -206,15 +210,15 @@ export async function installStorybook(config: any): Promise<void> {
   config.devDependencies['@storybook/addon-essentials'] = '^7.0.0';
   config.devDependencies['@storybook/addon-interactions'] = '^7.0.0';
   config.devDependencies['@storybook/testing-library'] = '^0.2.0';
-  
+
   // Add Storybook scripts
   config.scripts = config.scripts || {};
   config.scripts['storybook'] = 'storybook dev -p 6006';
   config.scripts['build-storybook'] = 'storybook build';
-  
+
   // Write updated package.json
   await writeFile('./package.json', JSON.stringify(config, null, 2));
-  
+
   // Create Storybook configuration
   const storybookConfig = `import type { StorybookConfig } from '@storybook/react';
 
@@ -234,7 +238,7 @@ const config: StorybookConfig = {
 };
 
 export default config;`;
-  
+
   await writeFile('.storybook/main.ts', storybookConfig);
 }
 
@@ -242,16 +246,16 @@ export async function installPlaywright(config: any): Promise<void> {
   // Add Playwright dependencies
   config.devDependencies = config.devDependencies || {};
   config.devDependencies['@playwright/test'] = '^1.40.0';
-  
+
   // Add Playwright scripts
   config.scripts = config.scripts || {};
   config.scripts['test:e2e'] = 'playwright test';
   config.scripts['test:e2e:ui'] = 'playwright test --ui';
   config.scripts['test:e2e:report'] = 'playwright show-report';
-  
+
   // Write updated package.json
   await writeFile('./package.json', JSON.stringify(config, null, 2));
-  
+
   // Create Playwright configuration
   const playwrightConfig = `import { defineConfig, devices } from '@playwright/test';
 
@@ -286,6 +290,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 });`;
-  
+
   await writeFile('playwright.config.ts', playwrightConfig);
 }

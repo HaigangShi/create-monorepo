@@ -5,11 +5,11 @@ export async function initializeGit(projectPath: string): Promise<void> {
   try {
     // Initialize git repository
     await execa('git', ['init'], { cwd: projectPath });
-    
+
     // Create initial commit
     await execa('git', ['add', '.'], { cwd: projectPath });
     await execa('git', ['commit', '-m', 'Initial commit'], { cwd: projectPath });
-    
+
     console.log('✅ Git repository initialized successfully');
   } catch (error) {
     console.warn('⚠️  Failed to initialize Git repository:');

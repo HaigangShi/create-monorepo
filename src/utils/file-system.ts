@@ -15,14 +15,8 @@ export async function ensureDir(dirPath: string): Promise<void> {
 }
 
 export async function writeFile(filePath: string, content: string): Promise<void> {
-  const dir = path.posix.dirname(filePath);
+  const dir = path.dirname(filePath);
   await fs.ensureDir(dir);
-  const topDir = path.posix.dirname(dir);
-  if (topDir && topDir !== dir) {
-    try {
-      await fs.ensureDir(topDir);
-    } catch {}
-  }
   await fs.writeFile(filePath, content, 'utf8');
 }
 
@@ -34,17 +28,20 @@ export async function copyTemplate(templatePath: string, targetPath: string): Pr
   await fs.copy(templatePath, targetPath);
 }
 
-export async function createDirectoryStructure(basePath: string, structure: Record<string, any>): Promise<void> {
+export async function createDirectoryStructure(
+  basePath: string,
+  structure: Record<string, any>
+): Promise<void> {
   for (const [key, value] of Object.entries(structure)) {
-    const fullPath = path.posix.join(basePath, key);
-    
+    const fullPath = path.join(basePath, key);
+
     if (typeof value === 'string') {
+      const parent = path.dirname(fullPath);
+      await fs.ensureDir(parent);
       await fs.writeFile(fullPath, value);
     } else if (value === null) {
-      // It's an empty directory
       await ensureDir(fullPath);
     } else if (typeof value === 'object') {
-      // It's a subdirectory
       await ensureDir(fullPath);
       await createDirectoryStructure(fullPath, value);
     }

@@ -44,7 +44,6 @@ export async function runDoctor(): Promise<void> {
 
     // Provide recommendations
     provideRecommendations(results);
-
   } catch (error) {
     spinner.fail(chalk.red('❌ Diagnostic check failed'));
     console.error(error instanceof Error ? error.message : error);
@@ -113,13 +112,15 @@ async function checkPackageManagers(): Promise<DiagnosticResult> {
     name: 'Package Managers',
     status: 'pass',
     message: `${message} (Recommended: ${recommended})`,
-    suggestion: available.includes('pnpm') ? undefined : 'Consider using pnpm for better monorepo support',
+    suggestion: available.includes('pnpm')
+      ? undefined
+      : 'Consider using pnpm for better monorepo support',
   };
 }
 
 async function checkGit(): Promise<DiagnosticResult> {
   const isGitInstalled = await checkGitInstalled();
-  
+
   if (!isGitInstalled) {
     return {
       name: 'Git',
@@ -160,18 +161,9 @@ async function checkGit(): Promise<DiagnosticResult> {
 }
 
 async function checkProjectStructure(): Promise<DiagnosticResult> {
-  const requiredFiles = [
-    'package.json',
-    'pnpm-workspace.yaml',
-    'turbo.json',
-  ];
+  const requiredFiles = ['package.json', 'pnpm-workspace.yaml', 'turbo.json'];
 
-  const optionalFiles = [
-    'apps',
-    'packages',
-    'services',
-    'configs',
-  ];
+  const optionalFiles = ['apps', 'packages', 'services', 'configs'];
 
   const missingRequired: string[] = [];
   const foundOptional: string[] = [];
@@ -267,23 +259,34 @@ async function checkDocker(): Promise<DiagnosticResult> {
     const { stdout } = await execa('docker', ['--version']);
     const version = stdout.trim();
 
-    // Check if docker-compose is available
+    // Prefer plugin-based 'docker compose'
     try {
-      await execa('docker-compose', ['--version']);
+      const compose = await execa('docker', ['compose', 'version']);
       return {
         name: 'Docker',
         status: 'pass',
-        message: `${version} (✓ Docker Compose available)`,
+        message: `${version} (✓ docker compose: ${compose.stdout.trim()})`,
       };
     } catch {
-      return {
-        name: 'Docker',
-        status: 'warn',
-        message: `${version} (Docker Compose not found)`,
-        suggestion: 'Install Docker Compose for multi-container development',
-      };
+      // Fallback to legacy docker-compose binary
+      try {
+        const legacy = await execa('docker-compose', ['--version']);
+        return {
+          name: 'Docker',
+          status: 'pass',
+          message: `${version} (✓ docker-compose: ${legacy.stdout.trim()})`,
+          suggestion: 'Consider upgrading to Docker Compose V2 (docker compose) for best support',
+        };
+      } catch {
+        return {
+          name: 'Docker',
+          status: 'warn',
+          message: `${version} (Compose not found)`,
+          suggestion: 'Install Docker Compose (V2 recommended: docker compose)',
+        };
+      }
     }
-  } catch (error) {
+  } catch {
     return {
       name: 'Docker',
       status: 'warn',
@@ -296,16 +299,16 @@ async function checkDocker(): Promise<DiagnosticResult> {
 function displayResults(results: DiagnosticResult[]): void {
   console.log(chalk.blue('\n📋 Diagnostic Results:\n'));
 
-  results.forEach((result) => {
+  results.forEach(result => {
     const icon = result.status === 'pass' ? '✅' : result.status === 'warn' ? '⚠️' : '❌';
     const color = result.status === 'pass' ? 'green' : result.status === 'warn' ? 'yellow' : 'red';
-    
+
     console.log(`${icon} ${chalk.bold(result.name)}: ${chalk[color](result.message)}`);
-    
+
     if (result.suggestion) {
       console.log(chalk.gray(`   💡 ${result.suggestion}`));
     }
-    
+
     console.log();
   });
 }

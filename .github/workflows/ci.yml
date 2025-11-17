@@ -122,10 +122,22 @@ jobs:
       - name: Run security audit
         run: npm audit --audit-level high
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: typescript
+
       - name: Run CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
-          languages: typescript
+          output: ../results
+          upload: always
+          cleanup-level: brutal
+          add-snippets: false
+          skip-queries: false
+          checkout_path: /home/runner/work/create-monorepo/create-monorepo
+          upload-database: true
+          wait-for-processing: true
 
   publish:
     name: Publish to NPM

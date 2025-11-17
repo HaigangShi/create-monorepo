@@ -21,13 +21,16 @@ interface CreateOptions {
   interactive?: boolean;
 }
 
-export async function createMonorepo(projectName?: string, options: CreateOptions = {}): Promise<void> {
+export async function createMonorepo(
+  projectName?: string,
+  options: CreateOptions = {}
+): Promise<void> {
   console.log(chalk.blue('🚀 Creating your monorepo project...\n'));
 
   try {
     // Get project configuration
     let config: MonorepoConfig;
-    
+
     if (options.interactive) {
       config = await promptForMonorepoConfig();
       if (projectName) {
@@ -37,13 +40,13 @@ export async function createMonorepo(projectName?: string, options: CreateOption
       if (!projectName) {
         throw new Error('Project name is required in non-interactive mode');
       }
-      
+
       // Validate project name
       const validation = validateProjectName(projectName);
       if (!validation.valid) {
         throw new Error(`Invalid project name: ${validation.errors.join(', ')}`);
       }
-      
+
       config = {
         name: projectName,
         packageManager: options.packageManager || 'pnpm',
@@ -117,19 +120,18 @@ export async function createMonorepo(projectName?: string, options: CreateOption
     console.log(chalk.green('\n✅ Monorepo project created successfully!\n'));
     console.log(chalk.cyan('Next steps:'));
     console.log(chalk.white(`  cd ${config.name}`));
-    
+
     if (config.skipInstall) {
       console.log(chalk.white(`  ${config.packageManager} install`));
     }
-    
+
     if (config.docker) {
       console.log(chalk.white(`  docker-compose up -d`));
     }
-    
+
     console.log(chalk.white(`  ${config.packageManager} run dev`));
     console.log();
     console.log(chalk.gray('For more information, see the documentation in your project folder.'));
-
   } catch (error) {
     console.error(chalk.red('\n❌ Failed to create monorepo:'));
     console.error(error instanceof Error ? error.message : error);

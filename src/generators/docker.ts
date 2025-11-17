@@ -2,30 +2,33 @@ import path from 'path';
 import { MonorepoConfig } from '../types';
 import { writeFile } from '../utils/file-system';
 
-export async function generateDockerConfig(projectPath: string, config: MonorepoConfig): Promise<void> {
+export async function generateDockerConfig(
+  projectPath: string,
+  config: MonorepoConfig
+): Promise<void> {
   // Generate Docker Compose configuration
   const dockerComposeContent = generateDockerCompose(config);
-  await writeFile(path.posix.join(projectPath, 'docker-compose.yml'), dockerComposeContent);
+  await writeFile(path.join(projectPath, 'docker-compose.yml'), dockerComposeContent);
 
   // Generate Dockerfiles for different services
-  const dockerPath = path.posix.join(projectPath, 'configs', 'docker');
-  
+  const dockerPath = path.join(projectPath, 'configs', 'docker');
+
   const dockerfiles = {
     'Dockerfile.web': generateWebDockerfile(),
     'Dockerfile.api': generateApiDockerfile(),
   };
 
   for (const [filename, content] of Object.entries(dockerfiles)) {
-    await writeFile(path.posix.join(dockerPath, filename), content);
+    await writeFile(path.join(dockerPath, filename), content);
   }
 
   // Generate .dockerignore
   const dockerignoreContent = generateDockerignore();
-  await writeFile(path.posix.join(projectPath, '.dockerignore'), dockerignoreContent);
+  await writeFile(path.join(projectPath, '.dockerignore'), dockerignoreContent);
 
   // Generate nginx configuration
   const nginxConfig = generateNginxConfig();
-  await writeFile(path.posix.join(projectPath, 'configs', 'nginx', 'nginx.conf'), nginxConfig);
+  await writeFile(path.join(projectPath, 'configs', 'nginx', 'nginx.conf'), nginxConfig);
 }
 
 export function generateDockerCompose(config: MonorepoConfig): string {
@@ -49,7 +52,7 @@ export function generateDockerCompose(config: MonorepoConfig): string {
       - postgres_data:/var/lib/postgresql/data
     networks:
       - monorepo-network`);
-    
+
     volumes.push('postgres_data:');
   }
 

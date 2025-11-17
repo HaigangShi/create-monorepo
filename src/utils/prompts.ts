@@ -13,11 +13,11 @@ export async function promptForProjectName(defaultName?: string): Promise<string
       validate: (input: string) => {
         const sanitized = sanitizeProjectName(input);
         const validation = validateProjectName(sanitized);
-        
+
         if (!validation.valid) {
           return `Invalid project name: ${validation.errors.join(', ')}`;
         }
-        
+
         return true;
       },
       filter: (input: string) => sanitizeProjectName(input),
@@ -262,7 +262,9 @@ export async function promptForTools(): Promise<string[]> {
 
 export async function promptForMonorepoConfig(): Promise<MonorepoConfig> {
   console.log(chalk.blue('\n🚀 Welcome to Create Monorepo!\n'));
-  console.log(chalk.gray('This tool will help you set up a modern monorepo development environment.\n'));
+  console.log(
+    chalk.gray('This tool will help you set up a modern monorepo development environment.\n')
+  );
 
   const projectName = await promptForProjectName();
   const packageManager = await promptForPackageManager();

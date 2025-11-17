@@ -219,18 +219,20 @@ my-monorepo/
 ### Using Docker Compose
 
 ```bash
-# Start all services
-docker-compose up -d
+# Start all services (Compose V2)
+docker compose up -d
 
 # Start specific services
-docker-compose up -d web-app api-service
+docker compose up -d web-app api-service
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop all services
-docker-compose down
+docker compose down
 ```
+
+On environments that still use the legacy binary, replace `docker compose` with `docker-compose`.
 
 ### Docker Services
 

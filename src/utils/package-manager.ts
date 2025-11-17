@@ -8,10 +8,10 @@ export async function installDependencies(
 ): Promise<void> {
   try {
     console.log(chalk.blue(`📦 Installing dependencies with ${packageManager}...`));
-    
+
     let command: string;
     let args: string[];
-    
+
     switch (packageManager) {
       case 'npm':
         command = 'npm';
@@ -28,12 +28,12 @@ export async function installDependencies(
       default:
         throw new Error(`Unsupported package manager: ${packageManager}`);
     }
-    
+
     await execa(command, args, {
       cwd: projectPath,
       stdio: 'inherit',
     });
-    
+
     console.log(chalk.green('✅ Dependencies installed successfully'));
   } catch (error) {
     console.error(chalk.red('❌ Failed to install dependencies:'));
@@ -42,7 +42,9 @@ export async function installDependencies(
   }
 }
 
-export async function checkPackageManagerInstalled(packageManager: 'npm' | 'yarn' | 'pnpm'): Promise<boolean> {
+export async function checkPackageManagerInstalled(
+  packageManager: 'npm' | 'yarn' | 'pnpm'
+): Promise<boolean> {
   try {
     await execa(packageManager, ['--version']);
     return true;

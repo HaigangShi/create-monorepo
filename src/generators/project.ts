@@ -41,7 +41,7 @@ async function createAppsStructure(projectPath: string, config: MonorepoConfig):
   for (const app of config.apps) {
     const appPath = path.join(projectPath, 'apps', app.name);
     await ensureDir(appPath);
-    
+
     // Create app-specific structure based on type
     switch (app.type) {
       case 'next':
@@ -62,77 +62,77 @@ async function createAppsStructure(projectPath: string, config: MonorepoConfig):
 
 async function createNextAppStructure(appPath: string): Promise<void> {
   const structure = {
-    'src': {
-      'app': null,
-      'components': null,
-      'lib': null,
-      'styles': null,
+    src: {
+      app: null,
+      components: null,
+      lib: null,
+      styles: null,
     },
-    'public': null,
+    public: null,
     'next.config.ts': getNextConfig(),
     'package.json': getNextPackageJson(),
     'tsconfig.json': getNextTsConfig(),
     'tailwind.config.ts': getTailwindConfig(),
     'postcss.config.js': getPostcssConfig(),
   };
-  
+
   await createDirectoryStructure(appPath, structure);
 }
 
 async function createVueAppStructure(appPath: string): Promise<void> {
   const structure = {
-    'src': {
-      'views': null,
-      'components': null,
-      'composables': null,
-      'router': null,
-      'assets': null,
+    src: {
+      views: null,
+      components: null,
+      composables: null,
+      router: null,
+      assets: null,
     },
-    'public': null,
+    public: null,
     'package.json': getVuePackageJson(),
     'vite.config.ts': getViteConfig(),
     'tsconfig.json': getTsConfig(),
     'tailwind.config.ts': getTailwindConfig(),
     'postcss.config.js': getPostcssConfig(),
   };
-  
+
   await createDirectoryStructure(appPath, structure);
 }
 
 async function createReactAppStructure(appPath: string): Promise<void> {
   const structure = {
-    'src': {
-      'pages': null,
-      'components': null,
-      'hooks': null,
-      'assets': null,
+    src: {
+      pages: null,
+      components: null,
+      hooks: null,
+      assets: null,
     },
-    'public': null,
+    public: null,
     'package.json': getReactPackageJson(),
     'vite.config.ts': getViteConfig(),
     'tsconfig.json': getTsConfig(),
     'tailwind.config.ts': getTailwindConfig(),
     'postcss.config.js': getPostcssConfig(),
   };
-  
+
   await createDirectoryStructure(appPath, structure);
 }
 
 async function createSvelteAppStructure(appPath: string): Promise<void> {
   const structure = {
-    'src': {
-      'routes': null,
-      'lib': null,
-      'components': null,
+    src: {
+      routes: null,
+      lib: null,
+      components: null,
     },
-    'static': null,
+    static: null,
     'package.json': getSveltePackageJson(),
     'vite.config.ts': getViteConfig(),
     'tsconfig.json': getTsConfig(),
     'tailwind.config.ts': getTailwindConfig(),
     'postcss.config.js': getPostcssConfig(),
   };
-  
+
   await createDirectoryStructure(appPath, structure);
 }
 
@@ -140,14 +140,14 @@ async function createPackagesStructure(projectPath: string, config: MonorepoConf
   for (const pkg of config.packages) {
     const packagePath = path.join(projectPath, 'packages', pkg.name);
     await ensureDir(packagePath);
-    
+
     const structure = {
-      'src': null,
+      src: null,
       'package.json': getPackagePackageJson(pkg.name, pkg.type),
       'tsconfig.json': getTsConfig(),
       'README.md': getPackageReadme(pkg.name, pkg.type),
     };
-    
+
     await createDirectoryStructure(packagePath, structure);
   }
 }
@@ -156,137 +156,143 @@ async function createServicesStructure(projectPath: string, config: MonorepoConf
   for (const service of config.services) {
     const servicePath = path.join(projectPath, 'services', service.name);
     await ensureDir(servicePath);
-    
+
     const structure = {
-      'src': {
-        'controllers': null,
-        'services': null,
-        'models': null,
-        'routes': null,
-        'middleware': null,
+      src: {
+        controllers: null,
+        services: null,
+        models: null,
+        routes: null,
+        middleware: null,
       },
       'package.json': getServicePackageJson(service.name, service.type),
       'tsconfig.json': getTsConfig(),
       'README.md': getServiceReadme(service.name, service.type),
     };
-    
+
     if (service.database) {
       (structure as any)['prisma'] = null;
     }
-    
+
     await createDirectoryStructure(servicePath, structure);
   }
 }
 
 async function createConfigStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
   const configPath = path.join(projectPath, 'configs');
-  
+
   const structure = {
-    'eslint': {
+    eslint: {
       'base.json': getBaseEslintConfig(),
       'next.json': getNextEslintConfig(),
       'vue.json': getVueEslintConfig(),
       'backend.json': getBackendEslintConfig(),
     },
-    'typescript': {
+    typescript: {
       'base.json': getBaseTsConfig(),
       'next.json': getNextTsConfigTemplate(),
       'vue.json': getVueTsConfig(),
       'node.json': getNodeTsConfig(),
     },
-    'vite': {
+    vite: {
       'web.config.ts': getViteWebConfig(),
       'lib.config.ts': getViteLibConfig(),
     },
-    'jest': {
+    jest: {
       'base.js': getBaseJestConfig(),
       'web.js': getWebJestConfig(),
     },
-    'tailwind': {
+    tailwind: {
       'base.config.ts': getBaseTailwindConfig(),
     },
-    'env': {
+    env: {
       'env-schema.ts': getEnvSchema(),
       'development.ts': getDevelopmentEnv(),
       'production.ts': getProductionEnv(),
     },
   };
-  
+
   await createDirectoryStructure(configPath, structure);
 }
 
 async function createScriptStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
   const scriptsPath = path.join(projectPath, 'scripts');
-  
+
   const structure = {
-    'build': {
+    build: {
       'build-all.ts': getBuildAllScript(),
       'build-web.ts': getBuildWebScript(),
       'build-service.ts': getBuildServiceScript(),
     },
-    'deploy': {
+    deploy: {
       'deploy-prod.ts': getDeployProdScript(),
       'deploy-staging.ts': getDeployStagingScript(),
     },
-    'database': {
+    database: {
       'migrate.ts': getMigrateScript(),
       'seed.ts': getSeedScript(),
     },
-    'utils': {
+    utils: {
       'env-check.ts': getEnvCheckScript(),
       'dependency-check.ts': getDependencyCheckScript(),
     },
   };
-  
+
   await createDirectoryStructure(scriptsPath, structure);
 }
 
-async function createDocumentationStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function createDocumentationStructure(
+  projectPath: string,
+  config: MonorepoConfig
+): Promise<void> {
   const docsPath = path.join(projectPath, 'docs');
-  
+
   const structure = {
-    'architecture': {
+    architecture: {
       'tech-stack.md': getTechStackDoc(),
       'directory-structure.md': getDirectoryStructureDoc(),
       'deployment.md': getDeploymentDoc(),
     },
-    'development': {
+    development: {
       'setup.md': getSetupDoc(),
       'coding-standards.md': getCodingStandardsDoc(),
       'testing.md': getTestingDoc(),
     },
-    'api': {
+    api: {
       'rest-api.md': getRestApiDoc(),
     },
-    'operations': {
+    operations: {
       'monitoring.md': getMonitoringDoc(),
       'troubleshooting.md': getTroubleshootingDoc(),
     },
   };
-  
+
   await createDirectoryStructure(docsPath, structure);
 }
 
 async function createGitHubStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
   const githubPath = path.join(projectPath, '.github', 'workflows');
-  
+
   const structure = {
     'ci.yml': getCiWorkflow(),
     'release.yml': getReleaseWorkflow(),
     'preview.yml': getPreviewWorkflow(),
     'security.yml': getSecurityWorkflow(),
   };
-  
+
   await createDirectoryStructure(githubPath, structure);
 }
 
-async function createDevContainerStructure(projectPath: string, config: MonorepoConfig): Promise<void> {
+async function createDevContainerStructure(
+  projectPath: string,
+  config: MonorepoConfig
+): Promise<void> {
   const devcontainerPath = path.join(projectPath, '.devcontainer');
-  
+
   const structure = {
     'devcontainer.json': getDevContainerConfig(),
   };
-  
+
   await createDirectoryStructure(devcontainerPath, structure);
 }
 
@@ -364,140 +370,164 @@ function getNextTsConfigTemplate(): string {
 }
 
 function getNextPackageJson(): string {
-  return JSON.stringify({
-    name: "@monorepo/next-app",
-    version: "1.0.0",
-    private: true,
-    scripts: {
-      dev: "next dev",
-      build: "next build",
-      start: "next start",
-      lint: "next lint",
+  return JSON.stringify(
+    {
+      name: '@monorepo/next-app',
+      version: '1.0.0',
+      private: true,
+      scripts: {
+        dev: 'next dev',
+        build: 'next build',
+        start: 'next start',
+        lint: 'next lint',
+      },
+      dependencies: {
+        next: '^14.0.0',
+        react: '^18.0.0',
+        'react-dom': '^18.0.0',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        '@types/node': '^20.0.0',
+        '@types/react': '^18.0.0',
+        '@types/react-dom': '^18.0.0',
+        eslint: '^8.0.0',
+        'eslint-config-next': '^14.0.0',
+      },
     },
-    dependencies: {
-      next: "^14.0.0",
-      react: "^18.0.0",
-      "react-dom": "^18.0.0",
-    },
-    devDependencies: {
-      typescript: "^5.0.0",
-      "@types/node": "^20.0.0",
-      "@types/react": "^18.0.0",
-      "@types/react-dom": "^18.0.0",
-      eslint: "^8.0.0",
-      "eslint-config-next": "^14.0.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getVuePackageJson(): string {
-  return JSON.stringify({
-    name: "@monorepo/vue-app",
-    version: "1.0.0",
-    private: true,
-    scripts: {
-      dev: "vite",
-      build: "vite build",
-      preview: "vite preview",
+  return JSON.stringify(
+    {
+      name: '@monorepo/vue-app',
+      version: '1.0.0',
+      private: true,
+      scripts: {
+        dev: 'vite',
+        build: 'vite build',
+        preview: 'vite preview',
+      },
+      dependencies: {
+        vue: '^3.3.0',
+        'vue-router': '^4.2.0',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        vite: '^4.4.0',
+        '@vitejs/plugin-vue': '^4.2.0',
+        'vue-tsc': '^1.8.0',
+      },
     },
-    dependencies: {
-      vue: "^3.3.0",
-      "vue-router": "^4.2.0",
-    },
-    devDependencies: {
-      typescript: "^5.0.0",
-      vite: "^4.4.0",
-      "@vitejs/plugin-vue": "^4.2.0",
-      "vue-tsc": "^1.8.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getReactPackageJson(): string {
-  return JSON.stringify({
-    name: "@monorepo/react-app",
-    version: "1.0.0",
-    private: true,
-    scripts: {
-      dev: "vite",
-      build: "vite build",
-      preview: "vite preview",
+  return JSON.stringify(
+    {
+      name: '@monorepo/react-app',
+      version: '1.0.0',
+      private: true,
+      scripts: {
+        dev: 'vite',
+        build: 'vite build',
+        preview: 'vite preview',
+      },
+      dependencies: {
+        react: '^18.0.0',
+        'react-dom': '^18.0.0',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        vite: '^4.4.0',
+        '@vitejs/plugin-react': '^4.0.0',
+      },
     },
-    dependencies: {
-      react: "^18.0.0",
-      "react-dom": "^18.0.0",
-    },
-    devDependencies: {
-      typescript: "^5.0.0",
-      vite: "^4.4.0",
-      "@vitejs/plugin-react": "^4.0.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getSveltePackageJson(): string {
-  return JSON.stringify({
-    name: "@monorepo/svelte-app",
-    version: "1.0.0",
-    private: true,
-    scripts: {
-      dev: "vite",
-      build: "vite build",
-      preview: "vite preview",
+  return JSON.stringify(
+    {
+      name: '@monorepo/svelte-app',
+      version: '1.0.0',
+      private: true,
+      scripts: {
+        dev: 'vite',
+        build: 'vite build',
+        preview: 'vite preview',
+      },
+      dependencies: {
+        svelte: '^4.0.0',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        vite: '^4.4.0',
+        '@sveltejs/vite-plugin-svelte': '^2.4.0',
+      },
     },
-    dependencies: {
-      svelte: "^4.0.0",
-    },
-    devDependencies: {
-      typescript: "^5.0.0",
-      vite: "^4.4.0",
-      "@sveltejs/vite-plugin-svelte": "^2.4.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getPackagePackageJson(name: string, type: string): string {
-  return JSON.stringify({
-    name: `@monorepo/${name}`,
-    version: "1.0.0",
-    main: "dist/index.js",
-    types: "dist/index.d.ts",
-    scripts: {
-      build: "tsc",
-      dev: "tsc --watch",
-      lint: "eslint src --ext .ts",
+  return JSON.stringify(
+    {
+      name: `@monorepo/${name}`,
+      version: '1.0.0',
+      main: 'dist/index.js',
+      types: 'dist/index.d.ts',
+      scripts: {
+        build: 'tsc',
+        dev: 'tsc --watch',
+        lint: 'eslint src --ext .ts',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        eslint: '^8.0.0',
+      },
     },
-    devDependencies: {
-      typescript: "^5.0.0",
-      eslint: "^8.0.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getServicePackageJson(name: string, type: string): string {
-  return JSON.stringify({
-    name: `@monorepo/${name}`,
-    version: "1.0.0",
-    main: "dist/index.js",
-    scripts: {
-      build: "tsc",
-      dev: "ts-node-dev src/index.ts",
-      start: "node dist/index.js",
-      lint: "eslint src --ext .ts",
+  return JSON.stringify(
+    {
+      name: `@monorepo/${name}`,
+      version: '1.0.0',
+      main: 'dist/index.js',
+      scripts: {
+        build: 'tsc',
+        dev: 'ts-node-dev src/index.ts',
+        start: 'node dist/index.js',
+        lint: 'eslint src --ext .ts',
+      },
+      dependencies: {
+        express: '^4.18.0',
+        cors: '^2.8.0',
+      },
+      devDependencies: {
+        typescript: '^5.0.0',
+        'ts-node-dev': '^2.0.0',
+        '@types/node': '^20.0.0',
+        '@types/express': '^4.17.0',
+        '@types/cors': '^2.8.0',
+        eslint: '^8.0.0',
+      },
     },
-    dependencies: {
-      express: "^4.18.0",
-      cors: "^2.8.0",
-    },
-    devDependencies: {
-      typescript: "^5.0.0",
-      "ts-node-dev": "^2.0.0",
-      "@types/node": "^20.0.0",
-      "@types/express": "^4.17.0",
-      "@types/cors": "^2.8.0",
-      eslint: "^8.0.0",
-    },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getPackageReadme(name: string, type: string): string {
@@ -540,85 +570,114 @@ The service runs on port configured in environment variables.
 }
 
 function getBaseEslintConfig(): string {
-  return JSON.stringify({
-    extends: [
-      "eslint:recommended",
-      "@typescript-eslint/recommended",
-    ],
-    parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
-    rules: {
-      "no-console": "off",
+  return JSON.stringify(
+    {
+      extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      rules: {
+        'no-console': 'off',
+      },
     },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getNextEslintConfig(): string {
-  return JSON.stringify({
-    extends: ["./base.json", "next/core-web-vitals"],
-  }, null, 2);
+  return JSON.stringify(
+    {
+      extends: ['./base.json', 'next/core-web-vitals'],
+    },
+    null,
+    2
+  );
 }
 
 function getVueEslintConfig(): string {
-  return JSON.stringify({
-    extends: ["./base.json", "plugin:vue/vue3-essential"],
-  }, null, 2);
+  return JSON.stringify(
+    {
+      extends: ['./base.json', 'plugin:vue/vue3-essential'],
+    },
+    null,
+    2
+  );
 }
 
 function getBackendEslintConfig(): string {
-  return JSON.stringify({
-    extends: ["./base.json"],
-    env: {
-      node: true,
+  return JSON.stringify(
+    {
+      extends: ['./base.json'],
+      env: {
+        node: true,
+      },
     },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getBaseTsConfig(): string {
-  return JSON.stringify({
-    compilerOptions: {
-      target: "ES2020",
-      module: "commonjs",
-      lib: ["ES2020"],
-      strict: true,
-      esModuleInterop: true,
-      skipLibCheck: true,
-      forceConsistentCasingInFileNames: true,
-      declaration: true,
-      declarationMap: true,
-      sourceMap: true,
-      resolveJsonModule: true,
+  return JSON.stringify(
+    {
+      compilerOptions: {
+        target: 'ES2020',
+        module: 'commonjs',
+        lib: ['ES2020'],
+        strict: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+        forceConsistentCasingInFileNames: true,
+        declaration: true,
+        declarationMap: true,
+        sourceMap: true,
+        resolveJsonModule: true,
+      },
     },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getNextTsConfig(): string {
-  return JSON.stringify({
-    extends: "./base.json",
-    compilerOptions: {
-      plugins: [
-        {
-          name: "next",
-        },
-      ],
+  return JSON.stringify(
+    {
+      extends: './base.json',
+      compilerOptions: {
+        plugins: [
+          {
+            name: 'next',
+          },
+        ],
+      },
     },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getVueTsConfig(): string {
-  return JSON.stringify({
-    extends: "./base.json",
-  }, null, 2);
+  return JSON.stringify(
+    {
+      extends: './base.json',
+    },
+    null,
+    2
+  );
 }
 
 function getNodeTsConfig(): string {
-  return JSON.stringify({
-    extends: "./base.json",
-    compilerOptions: {
-      target: "ES2020",
-      module: "commonjs",
+  return JSON.stringify(
+    {
+      extends: './base.json',
+      compilerOptions: {
+        target: 'ES2020',
+        module: 'commonjs',
+      },
     },
-  }, null, 2);
+    null,
+    2
+  );
 }
 
 function getViteWebConfig(): string {
@@ -1301,24 +1360,28 @@ jobs:
 }
 
 function getDevContainerConfig(): string {
-  return JSON.stringify({
-    name: "Monorepo Development Container",
-    image: "mcr.microsoft.com/devcontainers/typescript-node:18",
-    features: {
-      "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-      "ghcr.io/devcontainers/features/github-cli:1": {},
-    },
-    customizations: {
-      vscode: {
-        extensions: [
-          "dbaeumer.vscode-eslint",
-          "esbenp.prettier-vscode",
-          "bradlc.vscode-tailwindcss",
-          "ms-vscode.vscode-typescript-next",
-        ],
+  return JSON.stringify(
+    {
+      name: 'Monorepo Development Container',
+      image: 'mcr.microsoft.com/devcontainers/typescript-node:18',
+      features: {
+        'ghcr.io/devcontainers/features/docker-in-docker:2': {},
+        'ghcr.io/devcontainers/features/github-cli:1': {},
       },
+      customizations: {
+        vscode: {
+          extensions: [
+            'dbaeumer.vscode-eslint',
+            'esbenp.prettier-vscode',
+            'bradlc.vscode-tailwindcss',
+            'ms-vscode.vscode-typescript-next',
+          ],
+        },
+      },
+      postCreateCommand: 'pnpm install',
+      remoteUser: 'node',
     },
-    postCreateCommand: "pnpm install",
-    remoteUser: "node",
-  }, null, 2);
+    null,
+    2
+  );
 }
