@@ -1,9 +1,10 @@
-import { execa } from 'execa';
+import { execa } from './execa-wrapper';
 import path from 'path';
 import fs from 'fs-extra';
 import os from 'os';
 
-const CLI_PATH = path.join(__dirname, '../../dist/cli.js');
+const CLI_PATH = path.resolve(__dirname, '../../..', 'dist', 'cli.js');
+const ORIGINAL_CWD = process.cwd();
 const TEST_PROJECT_NAME = 'test-monorepo-e2e';
 
 describe('CLI E2E Tests', () => {
@@ -18,6 +19,7 @@ describe('CLI E2E Tests', () => {
   afterEach(async () => {
     // Clean up test directory
     if (testDir) {
+      process.chdir(ORIGINAL_CWD);
       await fs.remove(testDir);
     }
   });

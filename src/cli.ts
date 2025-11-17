@@ -53,9 +53,9 @@ async function main() {
     // Parse command line arguments
     await program.parseAsync(process.argv);
 
-    // Show help if no command provided
     if (process.argv.length === 2) {
-      program.help();
+      console.log(program.helpInformation());
+      throw new Error('NoArguments');
     }
 
   } catch (error) {

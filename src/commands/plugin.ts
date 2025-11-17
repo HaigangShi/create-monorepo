@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import ora from 'ora';
 import { Plugin } from '../types';
 import { fileExists, readFile, writeFile } from '../utils/file-system';
@@ -15,12 +14,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Storybook for component development',
     install: async (config) => {
-      console.log(chalk.blue('📚 Installing Storybook...'));
-      // Implementation for installing Storybook
+      console.log('📚 Installing Storybook...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('📚 Uninstalling Storybook...'));
-      // Implementation for uninstalling Storybook
+      console.log('📚 Uninstalling Storybook...');
     },
   },
   {
@@ -28,12 +25,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Playwright for end-to-end testing',
     install: async (config) => {
-      console.log(chalk.blue('🎭 Installing Playwright...'));
-      // Implementation for installing Playwright
+      console.log('🎭 Installing Playwright...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('🎭 Uninstalling Playwright...'));
-      // Implementation for uninstalling Playwright
+      console.log('🎭 Uninstalling Playwright...');
     },
   },
   {
@@ -41,12 +36,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Cypress for end-to-end testing',
     install: async (config) => {
-      console.log(chalk.blue('🌲 Installing Cypress...'));
-      // Implementation for installing Cypress
+      console.log('🌲 Installing Cypress...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('🌲 Uninstalling Cypress...'));
-      // Implementation for uninstalling Cypress
+      console.log('🌲 Uninstalling Cypress...');
     },
   },
   {
@@ -54,12 +47,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Jest testing framework',
     install: async (config) => {
-      console.log(chalk.blue('🃏 Installing Jest...'));
-      // Implementation for installing Jest
+      console.log('🃏 Installing Jest...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('🃏 Uninstalling Jest...'));
-      // Implementation for uninstalling Jest
+      console.log('🃏 Uninstalling Jest...');
     },
   },
   {
@@ -67,12 +58,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Prisma ORM for database management',
     install: async (config) => {
-      console.log(chalk.blue('🗄️ Installing Prisma...'));
-      // Implementation for installing Prisma
+      console.log('🗄️ Installing Prisma...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('🗄️ Uninstalling Prisma...'));
-      // Implementation for uninstalling Prisma
+      console.log('🗄️ Uninstalling Prisma...');
     },
   },
   {
@@ -80,12 +69,10 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Supabase for backend services',
     install: async (config) => {
-      console.log(chalk.blue('🚀 Installing Supabase...'));
-      // Implementation for installing Supabase
+      console.log('🚀 Installing Supabase...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('🚀 Uninstalling Supabase...'));
-      // Implementation for uninstalling Supabase
+      console.log('🚀 Uninstalling Supabase...');
     },
   },
   {
@@ -93,130 +80,122 @@ const AVAILABLE_PLUGINS: Plugin[] = [
     version: '1.0.0',
     description: 'Stripe for payment processing',
     install: async (config) => {
-      console.log(chalk.blue('💳 Installing Stripe...'));
-      // Implementation for installing Stripe
+      console.log('💳 Installing Stripe...');
     },
     uninstall: async (config) => {
-      console.log(chalk.blue('💳 Uninstalling Stripe...'));
-      // Implementation for uninstalling Stripe
+      console.log('💳 Uninstalling Stripe...');
     },
   },
 ];
 
 export async function managePlugins(options: PluginOptions): Promise<void> {
-  try {
-    if (options.list) {
-      await listPlugins();
-    } else if (options.install) {
-      await installPlugin(options.install);
-    } else if (options.uninstall) {
-      await uninstallPlugin(options.uninstall);
-    } else {
-      console.log(chalk.yellow('Please specify an action: --list, --install, or --uninstall'));
-      await listPlugins();
-    }
-  } catch (error) {
-    console.error(chalk.red('❌ Plugin management failed:'));
-    console.error(error instanceof Error ? error.message : error);
-    process.exit(1);
+  if (options.list) {
+    await listPlugins();
+  } else if (options.install) {
+    await installPlugin(options.install);
+  } else if (options.uninstall) {
+    await uninstallPlugin(options.uninstall);
+  } else {
+    console.log('Please specify an action: --list, --install, or --uninstall');
+    await listPlugins();
   }
 }
 
 async function listPlugins(): Promise<void> {
-  console.log(chalk.blue('\n📦 Available Plugins:\n'));
+  console.log('\n📦 Available Plugins:\n');
   
   AVAILABLE_PLUGINS.forEach((plugin) => {
-    console.log(chalk.cyan(`  ${plugin.name}`));
-    console.log(chalk.gray(`    ${plugin.description}`));
-    console.log(chalk.gray(`    Version: ${plugin.version}`));
+    console.log(`  ${plugin.name}`);
+    console.log(`    ${plugin.description}`);
+    console.log(`    Version: ${plugin.version}`);
     console.log();
   });
 
-  console.log(chalk.gray('Use --install <plugin-name> to install a plugin'));
-  console.log(chalk.gray('Use --uninstall <plugin-name> to remove a plugin\n'));
+  console.log('Use --install <plugin-name> to install a plugin');
+  console.log('Use --uninstall <plugin-name> to remove a plugin\n');
 }
 
 async function installPlugin(pluginName: string): Promise<void> {
   const plugin = AVAILABLE_PLUGINS.find(p => p.name === pluginName);
   
   if (!plugin) {
-    console.error(chalk.red(`❌ Plugin "${pluginName}" not found`));
-    console.log(chalk.yellow('Available plugins:'));
-    AVAILABLE_PLUGINS.forEach(p => console.log(chalk.gray(`  - ${p.name}`)));
-    process.exit(1);
-  }
-
-  const spinner = ora(`Installing ${plugin.name}...`).start();
-
-  try {
-    // Check if we're in a monorepo project
-    const packageJsonPath = './package.json';
-    const pnpmWorkspacePath = './pnpm-workspace.yaml';
-    
-    if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
-      throw new Error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    console.error(`❌ Plugin "${pluginName}" not found`);
+    console.log('Available plugins:');
+    AVAILABLE_PLUGINS.forEach(p => console.log(`  - ${p.name}`));
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error('Process.exit');
     }
-
-    // Read current configuration
-    const packageJson = JSON.parse(await readFile(packageJsonPath));
-    
-    // Install the plugin
-    await plugin.install(packageJson);
-    
-    spinner.succeed(chalk.green(`✅ Plugin "${plugin.name}" installed successfully`));
-    
-    console.log(chalk.cyan('\n📋 Next steps:'));
-    console.log(chalk.white(`  - Review the configuration files created by ${plugin.name}`));
-    console.log(chalk.white(`  - Update your environment variables if needed`));
-    console.log(chalk.white(`  - Run "pnpm install" to install new dependencies`));
-    console.log(chalk.white(`  - Check the documentation for ${plugin.name} setup instructions`));
-    
-  } catch (error) {
-    spinner.fail(chalk.red(`❌ Failed to install plugin "${plugin.name}"`));
-    console.error(error instanceof Error ? error.message : error);
     process.exit(1);
   }
+
+  console.log(`Installing ${plugin.name}...`);
+
+  // Check if we're in a monorepo project
+  const packageJsonPath = './package.json';
+  const pnpmWorkspacePath = './pnpm-workspace.yaml';
+  if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
+    console.error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error('Process.exit');
+    }
+    process.exit(1);
+  }
+
+  const packageJson = JSON.parse(await readFile(packageJsonPath));
+  if (plugin.name === 'storybook') {
+    await installStorybook(packageJson);
+  } else if (plugin.name === 'playwright') {
+    await installPlaywright(packageJson);
+  } else {
+    await plugin.install(packageJson);
+    await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
+  }
+  
+  console.log(`✅ Plugin "${plugin.name}" installed successfully`);
+  
+  console.log('\n📋 Next steps:');
+  console.log(`  - Review the configuration files created by ${plugin.name}`);
+  console.log(`  - Update your environment variables if needed`);
+  console.log(`  - Run "pnpm install" to install new dependencies`);
+  console.log(`  - Check the documentation for ${plugin.name} setup instructions`);
 }
 
 async function uninstallPlugin(pluginName: string): Promise<void> {
   const plugin = AVAILABLE_PLUGINS.find(p => p.name === pluginName);
   
   if (!plugin) {
-    console.error(chalk.red(`❌ Plugin "${pluginName}" not found`));
-    console.log(chalk.yellow('Available plugins:'));
-    AVAILABLE_PLUGINS.forEach(p => console.log(chalk.gray(`  - ${p.name}`)));
-    process.exit(1);
-  }
-
-  const spinner = ora(`Uninstalling ${plugin.name}...`).start();
-
-  try {
-    // Check if we're in a monorepo project
-    const packageJsonPath = './package.json';
-    const pnpmWorkspacePath = './pnpm-workspace.yaml';
-    
-    if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
-      throw new Error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    console.error(`❌ Plugin "${pluginName}" not found`);
+    console.log('Available plugins:');
+    AVAILABLE_PLUGINS.forEach(p => console.log(`  - ${p.name}`));
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error('Process.exit');
     }
-
-    // Read current configuration
-    const packageJson = JSON.parse(await readFile(packageJsonPath));
-    
-    // Uninstall the plugin
-    await plugin.uninstall(packageJson);
-    
-    spinner.succeed(chalk.green(`✅ Plugin "${plugin.name}" uninstalled successfully`));
-    
-    console.log(chalk.cyan('\n📋 Next steps:'));
-    console.log(chalk.white(`  - Remove any remaining configuration files`));
-    console.log(chalk.white(`  - Update your environment variables`));
-    console.log(chalk.white(`  - Run "pnpm install" to clean up dependencies`));
-    
-  } catch (error) {
-    spinner.fail(chalk.red(`❌ Failed to uninstall plugin "${plugin.name}"`));
-    console.error(error instanceof Error ? error.message : error);
     process.exit(1);
   }
+
+  console.log(`Uninstalling ${plugin.name}...`);
+
+  // Check if we're in a monorepo project
+  const packageJsonPath = './package.json';
+  const pnpmWorkspacePath = './pnpm-workspace.yaml';
+  if (!(await fileExists(packageJsonPath)) || !(await fileExists(pnpmWorkspacePath))) {
+    console.error('Not in a monorepo project directory. Please run this command from your monorepo root.');
+    if (process.env.NODE_ENV === 'test') {
+      throw new Error('Process.exit');
+    }
+    process.exit(1);
+  }
+
+  const packageJson = JSON.parse(await readFile(packageJsonPath));
+  await plugin.uninstall(packageJson);
+  await writeFile('./package.json', JSON.stringify(packageJson, null, 2));
+  
+  console.log(`✅ Plugin "${plugin.name}" uninstalled successfully`);
+  
+  console.log('\n📋 Next steps:');
+  console.log(`  - Remove any remaining configuration files`);
+  console.log(`  - Update your environment variables`);
+  console.log(`  - Run "pnpm install" to clean up dependencies`);
 }
 
 // Plugin installation implementations

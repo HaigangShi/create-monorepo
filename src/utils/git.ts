@@ -1,6 +1,5 @@
 import { execa } from 'execa';
 import path from 'path';
-import chalk from 'chalk';
 
 export async function initializeGit(projectPath: string): Promise<void> {
   try {
@@ -11,11 +10,11 @@ export async function initializeGit(projectPath: string): Promise<void> {
     await execa('git', ['add', '.'], { cwd: projectPath });
     await execa('git', ['commit', '-m', 'Initial commit'], { cwd: projectPath });
     
-    console.log(chalk.green('✅ Git repository initialized successfully'));
+    console.log('✅ Git repository initialized successfully');
   } catch (error) {
-    console.warn(chalk.yellow('⚠️  Failed to initialize Git repository:'));
+    console.warn('⚠️  Failed to initialize Git repository:');
     console.warn(error instanceof Error ? error.message : error);
-    console.warn(chalk.yellow('You can manually initialize Git later with: git init'));
+    console.warn('You can manually initialize Git later with: git init');
   }
 }
 

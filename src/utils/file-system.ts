@@ -23,7 +23,7 @@ export async function writeFile(filePath: string, content: string): Promise<void
       await fs.ensureDir(topDir);
     } catch {}
   }
-  await fs.writeFile(filePath, content);
+  await fs.writeFile(filePath, content, 'utf8');
 }
 
 export async function readFile(filePath: string): Promise<string> {
@@ -39,8 +39,7 @@ export async function createDirectoryStructure(basePath: string, structure: Reco
     const fullPath = path.posix.join(basePath, key);
     
     if (typeof value === 'string') {
-      // It's a file with content
-      await writeFile(fullPath, value);
+      await fs.writeFile(fullPath, value);
     } else if (value === null) {
       // It's an empty directory
       await ensureDir(fullPath);
